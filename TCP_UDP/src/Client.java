@@ -10,6 +10,7 @@ public class Client
         Socket s = new Socket("127.0.0.1",5000);
 
         PrintWriter pr = new PrintWriter(s.getOutputStream());
+        pr.println("Is it working?");
         pr.flush();
 
         InputStreamReader in = new InputStreamReader(s.getInputStream());
