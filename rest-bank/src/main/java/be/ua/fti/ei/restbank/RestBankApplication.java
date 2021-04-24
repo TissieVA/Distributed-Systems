@@ -9,5 +9,4 @@ public class RestBankApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RestBankApplication.class, args);
 	}
-
 }

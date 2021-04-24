@@ -10,7 +10,10 @@ public class Bank
     {
         this.database = new HashMap<>();
         this.database.put(0, new Account(0));
-        this.database.put(1, new Account(1));
+
+        Account ac1 = new Account(1);
+        this.database.put(1, ac1);
+        this.database.put(2, new SharedAccount(2,ac1));
     }
 
     public Account getAccount(int id)
@@ -26,5 +29,4 @@ public class Bank
 
         return instance;
     }
-
 }
