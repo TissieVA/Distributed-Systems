@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class EchoMultiServerTest {
@@ -31,5 +29,4 @@ class EchoMultiServerTest {
         assertEquals(msg2, "world");
         assertEquals(terminate, "bye");
     }
-
 }

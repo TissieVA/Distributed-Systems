@@ -14,13 +14,11 @@ public class Client_UDP {
 
     public String sendEcho(String msg) throws IOException {
         buf = msg.getBytes();
-        DatagramPacket packet
-                = new DatagramPacket(buf, buf.length, address, 4445);
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 5000);
         socket.send(packet);
         packet = new DatagramPacket(buf, buf.length);
         socket.receive(packet);
-        String received = new String(
-                packet.getData(), 0, packet.getLength());
+        String received = new String(packet.getData(), 0, packet.getLength());
         return received;
     }
 
@@ -28,3 +26,4 @@ public class Client_UDP {
         socket.close();
     }
 }
+

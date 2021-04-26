@@ -11,13 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class Client_UDPTest {
 
     @Test
-    public void whenCanSendAndReceivePacket_thenCorrect() throws IOException {
+    public void sendAndReceivePackets() throws IOException {
         new Server_UDP().start();
         Client_UDP client = new Client_UDP();
+
         String echo = client.sendEcho("hello server");
         assertEquals("hello server", echo);
         echo = client.sendEcho("server is working");
         assertFalse(echo.equals("hello server"));
-    }
+        assertEquals("server is working",echo);
 
+        client.sendEcho("end");
+        client.close();
+    }
 }

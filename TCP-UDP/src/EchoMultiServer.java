@@ -43,7 +43,7 @@ public class EchoMultiServer {
             String inputLine = null;
             while (true) {
                 try {
-                    if (!((inputLine = in.readLine()) != null)) break;
+                    if ((inputLine = in.readLine()) == null) break;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
