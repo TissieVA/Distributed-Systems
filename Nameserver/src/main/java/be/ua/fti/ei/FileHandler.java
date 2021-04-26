@@ -8,9 +8,9 @@ public class FileHandler {
         try {
             File myObj = new File(name);
             if (myObj.createNewFile()) {
-                System.out.println("File created: " + myObj.getName());
+                //System.out.println("File created: " + myObj.getName());
             } else {
-                System.out.println("File already exists.");
+                //System.out.println("File already exists.");
             }
         } catch (IOException e) {}
     }
@@ -22,7 +22,7 @@ public class FileHandler {
             FileWriter myWriter = new FileWriter(filename);
             myWriter.write(body);
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            //System.out.println("Successfully wrote to the file.");
             return true;
         } catch (IOException e) {
             return false;
