@@ -6,13 +6,15 @@ public class PublishBody
 {
     String hostname;
     ArrayList<String> files;
+    String ipAddress;
 
     public PublishBody() {
     }
 
-    public PublishBody(String hostname, ArrayList<String> files) {
+    public PublishBody(String hostname, ArrayList<String> files, String ipAddress) {
         this.hostname = hostname;
         this.files = files;
+        this.ipAddress = ipAddress;
     }
 
     public String getHostname() {
@@ -29,5 +31,13 @@ public class PublishBody
 
     public void setFiles(ArrayList<String> files) {
         this.files = files;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }

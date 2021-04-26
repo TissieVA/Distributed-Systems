@@ -1,0 +1,4 @@
+curl -w "\n" -H 'Content-Type: application/json' -X POST --data '{"hostname": "Wout","files": ["abc.txt","def.txt"]}' "localhost:8080/publish"
+curl -w "\n" -H 'Content-Type: application/json' -X POST --data '{"hostname": "Asif","files": ["image1.png"]}' "localhost:8080/publish"
+curl -w "\n" -H 'Content-Type: application/json' -X POST --data '{"hostname": "Tijs","files": []}' "localhost:8080/publish"
+curl -w "\n" "localhost:8080/find/abc.txt" -w "\n"

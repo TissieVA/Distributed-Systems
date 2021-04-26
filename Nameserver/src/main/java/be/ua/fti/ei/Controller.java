@@ -14,6 +14,6 @@ public class Controller
     @PostMapping("/publish")
     boolean publishNewNode(@RequestBody PublishBody body)
     {
-        return Database.getInstance().addNewNode(body.getHostname(), body.getFiles());
+        return Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress());
     }
 }

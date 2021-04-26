@@ -13,11 +13,13 @@ public class Database
 {
     private HashMap<Integer, String> hostNameDatabase;
     private ArrayList<Integer> localFileDatabase;
+    private ArrayList<String> usedIpAddresses;
 
     public Database()
     {
         this.hostNameDatabase = new HashMap<>();
         this.localFileDatabase = new ArrayList<>();
+        this.usedIpAddresses = new ArrayList<>();
         this.readXML();
     }
 
@@ -43,8 +45,12 @@ public class Database
     }
 
 
-    public boolean addNewNode(String hostname, ArrayList<String> files)
+    public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress)
     {
+        if(this.usedIpAddresses.contains(ipAddress))
+            return false;
+
+        this.usedIpAddresses.add(ipAddress);
 
         int hash = Hasher.getHash(hostname);
         this.hostNameDatabase.put(hash,hostname);
@@ -70,6 +76,7 @@ public class Database
         XMLDecoder xmlDecoder = new XMLDecoder(is);
         this.hostNameDatabase = (HashMap<Integer, String>) xmlDecoder.readObject();
         this.localFileDatabase = (ArrayList<Integer>) xmlDecoder.readObject();
+        this.usedIpAddresses = (ArrayList<String>) xmlDecoder.readObject();
     }
 
     public boolean outputXML()
@@ -78,6 +85,7 @@ public class Database
         XMLEncoder xmlEncoder = new XMLEncoder(output);
         xmlEncoder.writeObject(this.hostNameDatabase);
         xmlEncoder.writeObject(this.localFileDatabase);
+        xmlEncoder.writeObject(this.usedIpAddresses);
         xmlEncoder.close();
 
         String mapToString = output.toString();
