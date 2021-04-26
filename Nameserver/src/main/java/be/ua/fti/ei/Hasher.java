@@ -5,11 +5,10 @@ public class Hasher
 
     public static int getHash(String input)
     {
-        int hashed = input.hashCode();  //return 32 bit integer
-        int hashed_first16 = (hashed & 0b11111111111111110000000000000000) >>  16;
-        int hashed_last16  = hashed & 0b1111111111111111;
+        long max = 2147483648L;
+        long min = - 2147483648L;
+        long hashed = input.hashCode();  //return 32 bit integer
 
-        int output = hashed_first16 ^ hashed_last16; //XOR both
-        return output & 0b111111111111111;
+        return (int) (((hashed+max)*32768)/(max+Math.abs(min)));
     }
 }

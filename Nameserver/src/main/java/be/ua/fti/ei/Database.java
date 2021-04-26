@@ -1,45 +1,91 @@
 package be.ua.fti.ei;
 
+import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.StringWriter;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Database
 {
-    private HashMap<Integer, Integer> database;
+    private HashMap<Integer, String> hostNameDatabase;
+    private ArrayList<Integer> localFileDatabase;
 
     public Database()
     {
-        this.database = new HashMap<>();
-        this.database.put(6885, 0);
-        this.database.put(32507, 1);
+        this.hostNameDatabase = new HashMap<>();
+        this.localFileDatabase = new ArrayList<>();
+        this.readXML();
     }
 
-    public int getID(String filename)
+    public String searchFile(String filename)
     {
         int hash = Hasher.getHash(filename);
 
-        if(database.containsKey(hash))
-            return database.get(hash);
+        if(!this.localFileDatabase.contains(hash))
+            return "File not found!";
 
-        return -1;
+
+        List<Integer> sortedKeys = hostNameDatabase.keySet().stream().sorted().collect(Collectors.toList());
+
+        for (int i = sortedKeys.size()-1; i >= 0 ; i--)
+        {
+            if(sortedKeys.get(i) < hash)
+            {
+                return this.hostNameDatabase.get(sortedKeys.get(i));
+            }
+        }
+
+        return this.hostNameDatabase.get(sortedKeys.get(sortedKeys.size()-1));
+    }
+
+
+    public boolean addNewNode(String hostname, ArrayList<String> files)
+    {
+
+        int hash = Hasher.getHash(hostname);
+        this.hostNameDatabase.put(hash,hostname);
+
+        System.out.println("hostname" + hostname + "=" + hash);
+
+        files.forEach(x -> {
+            localFileDatabase.add(Hasher.getHash(x));
+            System.out.println(x + "=" + Hasher.getHash(x));
+        });
+
+        outputXML();
+
+        return true;
+    }
+
+    public void readXML()
+    {
+        InputStream is = FileHandler.getFileStream("Database.xml");
+        if(is == null)
+            return;
+
+        XMLDecoder xmlDecoder = new XMLDecoder(is);
+        this.hostNameDatabase = (HashMap<Integer, String>) xmlDecoder.readObject();
+        this.localFileDatabase = (ArrayList<Integer>) xmlDecoder.readObject();
     }
 
     public boolean outputXML()
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         XMLEncoder xmlEncoder = new XMLEncoder(output);
-        xmlEncoder.writeObject(database);
+        xmlEncoder.writeObject(this.hostNameDatabase);
+        xmlEncoder.writeObject(this.localFileDatabase);
         xmlEncoder.close();
 
         String mapToString = output.toString();
 
-        return FileHandler.writeToFile("output.xml",mapToString);
+        return FileHandler.writeToFile("Database.xml",mapToString);
 
     }
+
 
     private static Database instance;
 

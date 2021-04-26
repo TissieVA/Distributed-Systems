@@ -1,8 +1,6 @@
 package be.ua.fti.ei;
 
-import java.io.File;  // Import the File class
-import java.io.FileWriter;
-import java.io.IOException;  // Import the IOException class to handle errors
+import java.io.*;
 
 public class FileHandler {
 
@@ -14,10 +12,7 @@ public class FileHandler {
             } else {
                 System.out.println("File already exists.");
             }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
     }
 
     public static boolean writeToFile(String filename, String body)
@@ -30,10 +25,16 @@ public class FileHandler {
             System.out.println("Successfully wrote to the file.");
             return true;
         } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
             return false;
         }
     }
 
+    public static FileInputStream getFileStream(String filename)
+    {
+        try {
+            return new FileInputStream(filename);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
 }

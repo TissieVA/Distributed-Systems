@@ -1,21 +1,19 @@
 package be.ua.fti.ei;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class Controller
 {
-    @GetMapping("/mapping/{filename}")
-    Integer getFile(@PathVariable String filename)
+    @GetMapping("/find/{filename}")
+    String getFile(@PathVariable String filename)
     {
-        return Database.getInstance().getID(filename);
+        return Database.getInstance().searchFile(filename);
     }
 
-    @GetMapping("/mapping/createXML")
-    boolean createXML()
+    @PostMapping("/publish")
+    boolean publishNewNode(@RequestBody PublishBody body)
     {
-       return Database.getInstance().outputXML();
+        return Database.getInstance().addNewNode(body.getHostname(), body.getFiles());
     }
 }
