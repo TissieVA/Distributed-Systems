@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 public class Controller
 {
     @GetMapping("/find/{filename}")
-    String getFile(@PathVariable String filename)
+    Node getFile(@PathVariable String filename)
     {
         return Database.getInstance().searchFile(filename);
     }
@@ -15,5 +15,11 @@ public class Controller
     boolean publishNewNode(@RequestBody PublishBody body)
     {
         return Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress());
+    }
+
+    @GetMapping("/remove/{nodeName}")
+    boolean removeNode(@PathVariable String nodeName)
+    {
+        return Database.getInstance().removeNode(nodeName);
     }
 }

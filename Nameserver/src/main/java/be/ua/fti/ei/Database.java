@@ -3,68 +3,81 @@ package be.ua.fti.ei;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Database
 {
-    private HashMap<Integer, String> hostNameDatabase;
-    private ArrayList<Integer> localFileDatabase;
-    private ArrayList<String> usedIpAddresses;
+    private HashMap<Integer, Node> hostDatabase;
+    private HashMap<Integer,Integer> localFileDatabase;
+
 
     public Database()
     {
-        this.hostNameDatabase = new HashMap<>();
-        this.localFileDatabase = new ArrayList<>();
-        this.usedIpAddresses = new ArrayList<>();
+        this.hostDatabase = new HashMap<>();
+        this.localFileDatabase = new HashMap<>();
         this.readXML();
     }
 
-    public String searchFile(String filename)
+    public Node searchFile(String filename)
     {
         int hash = Hasher.getHash(filename);
 
-        if(!this.localFileDatabase.contains(hash))
-            return "File not found!";
+        if(!this.localFileDatabase.containsKey(hash))
+            return null;
 
 
-        List<Integer> sortedKeys = hostNameDatabase.keySet().stream().sorted().collect(Collectors.toList());
+        List<Integer> sortedKeys = hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
 
         for (int i = sortedKeys.size()-1; i >= 0 ; i--)
         {
             if(sortedKeys.get(i) < hash)
             {
-                return this.hostNameDatabase.get(sortedKeys.get(i));
+                return this.hostDatabase.get(sortedKeys.get(i));
             }
         }
 
-        return this.hostNameDatabase.get(sortedKeys.get(sortedKeys.size()-1));
+        return this.hostDatabase.get(sortedKeys.get(sortedKeys.size()-1));
     }
 
 
     public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress)
     {
-        if(this.usedIpAddresses.contains(ipAddress))
+
+        if (this.hostDatabase.values().stream().anyMatch(x -> x.getIpaddress().equals(ipAddress)))
             return false;
 
-        this.usedIpAddresses.add(ipAddress);
-
         int hash = Hasher.getHash(hostname);
-        this.hostNameDatabase.put(hash,hostname);
+        this.hostDatabase.put(hash,new Node(hostname, ipAddress));
 
         System.out.println("hostname" + hostname + "=" + hash);
 
         files.forEach(x -> {
-            localFileDatabase.add(Hasher.getHash(x));
+            localFileDatabase.put(Hasher.getHash(x),hash);
             System.out.println(x + "=" + Hasher.getHash(x));
         });
 
         outputXML();
 
         return true;
+    }
+
+    public boolean removeNode(String nodeName)
+    {
+        int hash = Hasher.getHash(nodeName);
+
+        if(this.hostDatabase.containsKey(hash))
+        {
+            for (int i: this.localFileDatabase.keySet())
+            {
+                if(this.localFileDatabase.get(i) == hash)
+                    this.localFileDatabase.remove(i);
+            }
+            this.hostDatabase.remove(hash);
+
+            return true;
+        }
+        return false;
     }
 
     public void readXML()
@@ -74,24 +87,21 @@ public class Database
             return;
 
         XMLDecoder xmlDecoder = new XMLDecoder(is);
-        this.hostNameDatabase = (HashMap<Integer, String>) xmlDecoder.readObject();
-        this.localFileDatabase = (ArrayList<Integer>) xmlDecoder.readObject();
-        this.usedIpAddresses = (ArrayList<String>) xmlDecoder.readObject();
+        this.hostDatabase = (HashMap<Integer, Node>) xmlDecoder.readObject();
+        this.localFileDatabase = (HashMap<Integer, Integer>) xmlDecoder.readObject();
     }
 
     public boolean outputXML()
     {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         XMLEncoder xmlEncoder = new XMLEncoder(output);
-        xmlEncoder.writeObject(this.hostNameDatabase);
+        xmlEncoder.writeObject(this.hostDatabase);
         xmlEncoder.writeObject(this.localFileDatabase);
-        xmlEncoder.writeObject(this.usedIpAddresses);
         xmlEncoder.close();
 
         String mapToString = output.toString();
 
         return FileHandler.writeToFile("Database.xml",mapToString);
-
     }
 
 
