@@ -11,6 +11,12 @@ public class Controller
         return Database.getInstance().searchFile(filename);
     }
 
+    @GetMapping("/find/ipaddress/{filename}")
+    String getFileIpAddress(@PathVariable String filename)
+    {
+        return Database.getInstance().searchFile(filename).getIpaddress();
+    }
+
     @PostMapping("/publish")
     boolean publishNewNode(@RequestBody PublishBody body)
     {
