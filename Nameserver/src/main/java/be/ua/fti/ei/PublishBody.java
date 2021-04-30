@@ -1,5 +1,4 @@
 package be.ua.fti.ei;
-
 import java.util.ArrayList;
 
 public class PublishBody

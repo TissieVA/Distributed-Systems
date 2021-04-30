@@ -14,6 +14,11 @@ public class Controller
     @GetMapping("/find/ipaddress/{filename}")
     String getFileIpAddress(@PathVariable String filename)
     {
+        try
+        {
+            Thread.sleep(3000);
+        }catch (Exception e){}
+        
         return Database.getInstance().searchFile(filename).getIpaddress();
     }
 

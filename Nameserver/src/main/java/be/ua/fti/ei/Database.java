@@ -55,7 +55,7 @@ public class Database
 
         this.hostDatabase.put(hash,new Node(hostname, ipAddress));
 
-        System.out.println("hostname" + hostname + "=" + hash);
+        System.out.println("hostname: " + hostname + "=" + hash);
 
         files.forEach(x -> {
             localFileDatabase.put(Hasher.getHash(x),hash);
@@ -79,6 +79,7 @@ public class Database
                     this.localFileDatabase.remove(i);
             }
             this.hostDatabase.remove(hash);
+            outputXML();
 
             return true;
         }
