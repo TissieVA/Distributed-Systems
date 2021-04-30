@@ -40,7 +40,6 @@ public class Database
         return this.hostDatabase.get(sortedKeys.get(sortedKeys.size()-1));
     }
 
-
     public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress)
     {
 
@@ -48,6 +47,12 @@ public class Database
             return false;
 
         int hash = Hasher.getHash(hostname);
+
+        if(this.hostDatabase.containsKey(hash))
+        {
+            return false;
+        }
+
         this.hostDatabase.put(hash,new Node(hostname, ipAddress));
 
         System.out.println("hostname" + hostname + "=" + hash);
