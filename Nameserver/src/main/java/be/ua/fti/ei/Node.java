@@ -2,15 +2,16 @@ package be.ua.fti.ei;
 
 public class Node implements java.io.Serializable
 {
-    private String ipaddress;
     private String name;
+    private String ipaddress;
+
 
     public Node() {
     }
 
     public Node( String name, String ipaddress) {
-        this.ipaddress = ipaddress;
         this.name = name;
+        this.ipaddress = ipaddress;
     }
 
     public String getIpaddress() {
