@@ -68,15 +68,14 @@ public class Database
         return true;
     }
 
+
     public boolean removeNode(String nodeName)
     {
 
         int hash = Hasher.getHash(nodeName);
-        System.out.println("the node hashname hashed is:" +hash);
         if(this.hostDatabase.containsKey(hash))
         {
             Iterator it =this.localFileDatabase.entrySet().iterator();
-            System.out.println("the node contains the hash");
             while (it.hasNext())
             {
                 Map.Entry me= (Map.Entry) it.next();
