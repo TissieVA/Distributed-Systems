@@ -4,6 +4,7 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public class Database
@@ -69,14 +70,18 @@ public class Database
 
     public boolean removeNode(String nodeName)
     {
-        int hash = Hasher.getHash(nodeName);
 
+        int hash = Hasher.getHash(nodeName);
+        System.out.println("the node hashname hashed is:" +hash);
         if(this.hostDatabase.containsKey(hash))
         {
-            for (int i: this.localFileDatabase.keySet())
+            Iterator it =this.localFileDatabase.entrySet().iterator();
+            System.out.println("the node contains the hash");
+            while (it.hasNext())
             {
-                if(this.localFileDatabase.get(i) == hash)
-                    this.localFileDatabase.remove(i);
+                Map.Entry me= (Map.Entry) it.next();
+                if(me.getValue().equals(hash))
+                    it.remove();
             }
             this.hostDatabase.remove(hash);
 
