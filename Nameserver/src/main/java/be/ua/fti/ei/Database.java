@@ -4,6 +4,7 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public class Database
@@ -67,16 +68,19 @@ public class Database
         return true;
     }
 
+
     public boolean removeNode(String nodeName)
     {
-        int hash = Hasher.getHash(nodeName);
 
+        int hash = Hasher.getHash(nodeName);
         if(this.hostDatabase.containsKey(hash))
         {
-            for (int i: this.localFileDatabase.keySet())
+            Iterator it =this.localFileDatabase.entrySet().iterator();
+            while (it.hasNext())
             {
-                if(this.localFileDatabase.get(i) == hash)
-                    this.localFileDatabase.remove(i);
+                Map.Entry me= (Map.Entry) it.next();
+                if(me.getValue().equals(hash))
+                    it.remove();
             }
             this.hostDatabase.remove(hash);
             outputXML();
