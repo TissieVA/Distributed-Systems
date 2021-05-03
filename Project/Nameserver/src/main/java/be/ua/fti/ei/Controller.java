@@ -16,8 +16,8 @@ public class Controller
     {
         try
         {
-            Thread.sleep(3000);
-        }catch (Exception e){}
+            Thread.sleep(5000);
+        }catch (Exception ignored){}
         
         return Database.getInstance().searchFile(filename).getIpaddress();
     }
