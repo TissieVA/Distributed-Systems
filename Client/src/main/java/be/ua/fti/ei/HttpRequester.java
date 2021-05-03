@@ -14,10 +14,6 @@ public class HttpRequester {
     // it can also convert a JSON string into a java object. Exactly what we need. More info on https://github.com/google/gson
     private static Gson gsonConvertor=new Gson();//has to be static cause otherwise can't acces it from a static context.
 
-
-
-
-
     //when we don't get anything back we can use this
     public static void httprequestPOST(String url, String body){//string body json object
         HttpRequest request = HttpRequest.newBuilder()
