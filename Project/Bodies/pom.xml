@@ -5,14 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>be.ua.fti.ei</groupId>
-    <artifactId>Distributed-systems</artifactId>
+    <artifactId>Bodies</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>Nameserver</module>
-        <module>Client</module>
-        <module>Bodies</module>
-    </modules>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
