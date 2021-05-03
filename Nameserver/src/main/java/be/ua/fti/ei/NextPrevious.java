@@ -1,8 +1,6 @@
 package be.ua.fti.ei;
 
-/**
- * Created by asif on 03/05/2021
- */
+
 public class NextPrevious {
 
     private Integer previous,next,numberOfNodes;
@@ -11,6 +9,9 @@ public class NextPrevious {
         this.previous = previous;
         this.next = next;
         this.numberOfNodes = numberOfNodes;
+    }
+
+    public NextPrevious() {
     }
 
     public Integer getPrevious() {

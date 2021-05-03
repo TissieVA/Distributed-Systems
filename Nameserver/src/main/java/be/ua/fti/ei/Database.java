@@ -127,13 +127,15 @@ public class Database
 
     public Integer higherNeighbour(String hostName)
     {
+        int hostid = Hasher.getHash(hostName);
         List<Integer> ascendingStream = this.hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
-      return ascendingStream.stream().filter(integer -> integer >= Hasher.getHash(hostName)).findFirst().orElse(ascendingStream.get(0));
+        return ascendingStream.stream().filter(integer -> integer >= hostid).findFirst().orElse(ascendingStream.get(0));
     }
 
     public Integer lowerNeighbour(String hostName)
     {
+        int hostid = Hasher.getHash(hostName);
         List<Integer> descendingStream = this.hostDatabase.keySet().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-       return descendingStream.stream().filter(integer -> integer < Hasher.getHash(hostName)).findFirst().orElse(descendingStream.get(0));
+        return descendingStream.stream().filter(integer -> integer < hostid).findFirst().orElse(descendingStream.get(0));
     }
 }
