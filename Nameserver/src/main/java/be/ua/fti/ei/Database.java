@@ -5,6 +5,7 @@ import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Database
 {
@@ -118,5 +119,20 @@ public class Database
             instance = new Database();
 
         return instance;
+    }
+
+    public HashMap<Integer, Node> getHostDatabase() {
+        return hostDatabase;
+    }
+
+    public Integer higherNeighbour(String hostName)
+    {
+        Stream sortedStream = this.hostDatabase.keySet().stream().sorted();
+      return sortedStream..filter(integer -> integer >= Hasher.getHash(hostName)).findFirst().orElse(this)
+    }
+
+    public Integer lowerNeighbour(String hostName)
+    {
+       return this.hostDatabase.keySet().stream().filter(integer -> integer < Hasher.getHash(hostName)).sorted(Comparator.reverseOrder()).findFirst().orElse(null);
     }
 }
