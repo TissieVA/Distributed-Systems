@@ -28,17 +28,9 @@ public class Controller
             return new NextPrevious(Hasher.getHash(body.hostname),Hasher.getHash(body.hostname),n);
         else
         {
-            int next,previous;
-            Integer higherNeighbour = Database.getInstance().higherNeighbour();
-            if(higherNeighbour == null)
-                higherNeighbour = Database.getInstance().getHostDatabase().keySet().stream().sorted().findFirst();
-
-
-            Integer lowerNeighbour = Database.getInstance().lowerNeighbour();
-            if (higherNeighbour != null && lowerNeighbour != null)
-                return new NextPrevious(higherNeighbour,lowerNeighbour,n);
-            else if ()
-
+           Integer higherNeighbour = Database.getInstance().higherNeighbour(body.hostname);
+            Integer lowerNeighbour = Database.getInstance().lowerNeighbour(body.hostname);
+            return new NextPrevious(lowerNeighbour,higherNeighbour,n);
         }
 
 
