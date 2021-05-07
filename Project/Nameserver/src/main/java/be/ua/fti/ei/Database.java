@@ -68,7 +68,6 @@ public class Database
         return true;
     }
 
-
     public boolean removeNode(String nodeName)
     {
 

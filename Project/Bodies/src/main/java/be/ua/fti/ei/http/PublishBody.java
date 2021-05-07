@@ -1,16 +1,20 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.http;
 import java.util.ArrayList;
 
-public class PublishBody
+public class PublishBody implements java.io.Serializable
 {
     String hostname;
     ArrayList<String> files;
     String ipAddress;
 
-    public PublishBody() {
+    public PublishBody()
+    {
+        super();
     }
 
     public PublishBody(String hostname, ArrayList<String> files, String ipAddress) {
+        super();
+
         this.hostname = hostname;
         this.files = files;
         this.ipAddress = ipAddress;

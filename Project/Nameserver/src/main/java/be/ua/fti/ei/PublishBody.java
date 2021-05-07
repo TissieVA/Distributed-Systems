@@ -7,8 +7,7 @@ public class PublishBody
     ArrayList<String> files;
     String ipAddress;
 
-    public PublishBody() {
-    }
+    public PublishBody() { }
 
     public PublishBody(String hostname, ArrayList<String> files, String ipAddress) {
         this.hostname = hostname;

@@ -2,38 +2,53 @@ package be.ua.fti.ei;
 
 import java.io.*;
 
-public class FileHandler {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    public static void createFileMethod(String name) {
-        try {
+public class FileHandler
+{
+    private static final Logger logger = LoggerFactory.getLogger(FileHandler.class);
+
+    public static void createFileMethod(String name)
+    {
+        try
+        {
             File myObj = new File(name);
-            if (myObj.createNewFile()) {
-                //System.out.println("File created: " + myObj.getName());
-            } else {
-                //System.out.println("File already exists.");
-            }
-        } catch (IOException e) {}
+            myObj.createNewFile();
+        }
+        catch (IOException e)
+        {
+            logger.error(e.getMessage());
+        }
     }
 
     public static boolean writeToFile(String filename, String body)
     {
         createFileMethod(filename);
-        try {
+        try
+        {
             FileWriter myWriter = new FileWriter(filename);
             myWriter.write(body);
             myWriter.close();
             //System.out.println("Successfully wrote to the file.");
             return true;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
+            logger.error(e.getMessage());
             return false;
         }
     }
 
     public static FileInputStream getFileStream(String filename)
     {
-        try {
+        try
+        {
             return new FileInputStream(filename);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e)
+        {
+            logger.error(e.getMessage());
             return null;
         }
     }

@@ -6,15 +6,16 @@ public class Node implements java.io.Serializable
     private String ipaddress;
 
 
-    public Node() {
-    }
+    public Node() { }
 
-    public Node( String name, String ipaddress) {
+    public Node( String name, String ipaddress)
+    {
         this.name = name;
         this.ipaddress = ipaddress;
     }
 
-    public String getIpaddress() {
+    public String getIpaddress()
+    {
         return ipaddress;
     }
 

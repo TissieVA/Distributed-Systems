@@ -1,17 +1,13 @@
 package be.ua.fti.ei;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 public class Client
 {
-
-
     private String name;
     private String ipaddress;
     private int id;
     private int previousId;
     private int nextId;
+    private String nameServerAddress;
 
     public Client(String name, String ipaddress)
     {
@@ -69,4 +65,13 @@ public class Client
         this.nextId = nextId;
     }
 
+    public String getNameServerAddress()
+    {
+        return nameServerAddress;
+    }
+
+    public void setNameServerAddress(String nameServerAddress)
+    {
+        this.nameServerAddress = nameServerAddress;
+    }
 }
