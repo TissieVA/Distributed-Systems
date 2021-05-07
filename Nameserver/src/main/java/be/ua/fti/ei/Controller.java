@@ -20,23 +20,24 @@ public class Controller
     @PostMapping("/publish")
     NextPrevious publishNewNode(@RequestBody PublishBody body)
     {
-        Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress());
+        if(!Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress()))
+            return null;
 
-        //if this requester is the only one => nextID = requester, previousID = requester
-        int n = (int) Database.getInstance().getHostDatabase().keySet().stream().count();
-        if (n == 1)
-            return new NextPrevious(Hasher.getHash(body.hostname),Hasher.getHash(body.hostname),n);
+        // If no other nodes exist => nextID = requester, previousID = requester
+        int hosts = Database.getInstance().getHostDatabase().size();
+        int hash = Hasher.getHash(body.getHostname());
+
+        if (hosts == 1)
+        {
+            return new NextPrevious(hash, hash, hosts);
+        }
         else
         {
-           Integer higherNeighbour = Database.getInstance().higherNeighbour(body.hostname);
-            Integer lowerNeighbour = Database.getInstance().lowerNeighbour(body.hostname);
-            return new NextPrevious(lowerNeighbour,higherNeighbour,n);
+            int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
+            int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+            return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
         }
-
-
     }
-
-
 
     @GetMapping("/remove/{nodeName}")
     boolean removeNode(@PathVariable String nodeName)

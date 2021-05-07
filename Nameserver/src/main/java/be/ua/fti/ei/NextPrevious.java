@@ -3,38 +3,37 @@ package be.ua.fti.ei;
 
 public class NextPrevious {
 
-    private Integer previous,next,numberOfNodes;
+    private int previous,next,numberOfNodes;
 
-    public NextPrevious(Integer previous, Integer next, Integer numberOfNodes) {
+    public NextPrevious(int previous, int next, int numberOfNodes) {
         this.previous = previous;
         this.next = next;
         this.numberOfNodes = numberOfNodes;
     }
 
-    public NextPrevious() {
-    }
+    public NextPrevious() { }
 
-    public Integer getPrevious() {
+    public int getPrevious() {
         return previous;
     }
 
-    public void setPrevious(Integer previous) {
+    public void setPrevious(int previous) {
         this.previous = previous;
     }
 
-    public Integer getNext() {
+    public int getNext() {
         return next;
     }
 
-    public void setNext(Integer next) {
+    public void setNext(int next) {
         this.next = next;
     }
 
-    public Integer getNumberOfNodes() {
+    public int getNumberOfNodes() {
         return numberOfNodes;
     }
 
-    public void setNumberOfNodes(Integer numberOfNodes) {
+    public void setNumberOfNodes(int numberOfNodes) {
         this.numberOfNodes = numberOfNodes;
     }
 }
