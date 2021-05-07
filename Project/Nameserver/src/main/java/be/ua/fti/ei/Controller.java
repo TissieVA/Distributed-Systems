@@ -1,5 +1,6 @@
 package be.ua.fti.ei;
 
+import be.ua.fti.ei.http.PublishBody;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,11 +15,6 @@ public class Controller
     @GetMapping("/find/ipaddress/{filename}")
     String getFileIpAddress(@PathVariable String filename)
     {
-        try
-        {
-            Thread.sleep(5000);
-        }catch (Exception ignored){}
-        
         return Database.getInstance().searchFile(filename).getIpaddress();
     }
 
