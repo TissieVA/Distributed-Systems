@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class Node
@@ -31,8 +33,9 @@ public class Node
 
         try
         {
+            ArrayList<String> files = new ArrayList<>(Arrays.asList("abc.txt", "def.txt"));
             // Instantiate client info & socket
-            Node.client = new Client("TestNode", InetAddress.getLocalHost().getHostAddress());
+            Node.client = new Client("TestNode", InetAddress.getLocalHost().getHostAddress(), files);
 
             // In IPv4: any address from 224.0.0.0 -> 239.255.255.255 can be used as a multicast address
             // Meaning anyone who joins the same multicast ip-group can receive these messages

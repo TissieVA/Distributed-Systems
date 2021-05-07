@@ -1,8 +1,10 @@
 package be.ua.fti.ei;
 
 import be.ua.fti.ei.sockets.NameServerResponseBody;
+import be.ua.fti.ei.sockets.PublishBody;
 import be.ua.fti.ei.sockets.SocketBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
 import org.slf4j.Logger;
@@ -79,9 +81,15 @@ public class MulticastSocketServer
             {
                 NameServerResponseBody nsbody = this.gson.fromJson(received, NameServerResponseBody.class);
 
-                // Debug this code!!!!!!
                 String nsurl = "http://" + ip.getHostAddress() + ":" + nsbody.getPort();
                 Node.getClient().setNameServerAddress(nsurl);
+
+                try
+                {
+                    MessageHandler.sendAddNodeRestRequest();
+                } catch (JsonProcessingException ignored){}
+
+                //HttpRequester.httpRequestPOST(Node.getClient().getNameServerAddress(),pb.);
 
                 // 1. Find files on this server
                 // 2. Publish (HttpRequester)
@@ -105,6 +113,22 @@ public class MulticastSocketServer
         sb.setType("find");
 
         String msg = this.gson.toJson(sb);
+        byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
+
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
+
+        try
+        {
+            this.socket.send(packet);
+        }
+        catch (Exception ex)
+        {
+            logger.error(ex.getMessage());
+        }
+    }
+
+    public void sendMessage(String msg)
+    {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
