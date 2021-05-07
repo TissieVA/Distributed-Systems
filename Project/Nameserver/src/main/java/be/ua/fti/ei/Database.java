@@ -89,6 +89,33 @@ public class Database
         return false;
     }
 
+    public int getHigherNeighbour(String hostName)
+    {
+        return this.getHigherNeighbour(Hasher.getHash(hostName));
+    }
+
+    public int getHigherNeighbour(int hostId)
+    {
+        List<Integer> ascendingStream = this.hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
+
+        return ascendingStream.stream().filter(integer -> integer >= hostId).findFirst()
+                .orElse(ascendingStream.get(0));
+    }
+
+    public int getLowerNeighbour(String hostName)
+    {
+        return this.getLowerNeighbour(Hasher.getHash(hostName));
+    }
+    
+    public int getLowerNeighbour(int hostId)
+    {
+        List<Integer> descendingStream = this.hostDatabase.keySet().stream()
+                .sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+        return descendingStream.stream().filter(integer -> integer < hostId).findFirst()
+                .orElse(descendingStream.get(0));
+    }
+
     public void readXML()
     {
         InputStream is = FileHandler.getFileStream("Database.xml");
@@ -123,4 +150,9 @@ public class Database
 
         return instance;
     }
+
+    public HashMap<Integer, Node> getHostDatabase() {
+        return hostDatabase;
+    }
+
 }
