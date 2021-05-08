@@ -81,7 +81,6 @@ public class MulticastSocketServer
                 respondToFindNS();
             }
         }
-
         this.socket.close();
     }
 
@@ -90,9 +89,7 @@ public class MulticastSocketServer
      */
     public void respondToFindNS()
     {
-        NameServerResponseBody nsrb = new NameServerResponseBody();
-        nsrb.setType("ns");
-        nsrb.setPort(8080);
+        NameServerResponseBody nsrb = new NameServerResponseBody(8080);
 
         String msg = this.gson.toJson(nsrb);
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);

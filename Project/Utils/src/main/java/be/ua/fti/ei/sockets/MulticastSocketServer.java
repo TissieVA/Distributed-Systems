@@ -1,12 +1,7 @@
-package be.ua.fti.ei;
-
-import be.ua.fti.ei.sockets.NameServerResponseBody;
-import be.ua.fti.ei.sockets.PublishBody;
-import be.ua.fti.ei.sockets.SocketBody;
+package be.ua.fti.ei.sockets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,19 +75,7 @@ public class MulticastSocketServer
 
             if(body.getType().equals("ns"))
             {
-                NameServerResponseBody nsbody = this.gson.fromJson(received, NameServerResponseBody.class);
 
-                String nsurl = "http://" + ip.getHostAddress() + ":" + nsbody.getPort();
-                Node.getClient().setNameServerAddress(nsurl);
-
-                try
-                {
-                    MessageHandler.sendAddNodeRestRequest();
-                }
-                catch (JsonProcessingException e)
-                {
-                    logger.error(e.getMessage());
-                }
             }
         }
 
@@ -100,28 +83,8 @@ public class MulticastSocketServer
     }
 
     /**
-     * Send a multicast message to find the Name Server
+     * Send a multicast message
      */
-    public void findNS()
-    {
-        SocketBody sb = new SocketBody();
-        sb.setType("find");
-
-        String msg = this.gson.toJson(sb);
-        byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
-
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
-
-        try
-        {
-            this.socket.send(packet);
-        }
-        catch (Exception ex)
-        {
-            logger.error(ex.getMessage());
-        }
-    }
-
     public void sendMessage(String msg)
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);

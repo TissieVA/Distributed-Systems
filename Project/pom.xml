@@ -11,7 +11,7 @@
     <modules>
         <module>Nameserver</module>
         <module>Client</module>
-        <module>Bodies</module>
+        <module>Utils</module>
     </modules>
 
     <properties>
