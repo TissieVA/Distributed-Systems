@@ -1,13 +1,30 @@
 package be.ua.fti.ei;
 
-import be.ua.fti.ei.sockets.PublishBody;
-import be.ua.fti.ei.sockets.SocketBody;
+import be.ua.fti.ei.sockets.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
-public class MessageHandler
+public class ClientMessageHandler implements MessageHandler
 {
     private static Gson gson;
+    private MulticastSocketServer mss;
+
+    @Override
+    public void parse(SocketBody sb, String msg, String ip, int port)
+    {
+        if(sb.getType().equals("ns"))
+        {
+            NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
+
+        }
+    }
+
+
+    @Override
+    public void setServer(MulticastSocketServer mss)
+    {
+        this.mss = mss;
+    }
 
     public static void sendFindNS()
     {
@@ -28,6 +45,5 @@ public class MessageHandler
         String json = gson.toJson(pb);
 
         HttpRequester.POST(Node.getClient().getNameServerAddress() + "/publish", json);
-
     }
 }

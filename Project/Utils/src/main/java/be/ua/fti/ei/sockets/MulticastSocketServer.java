@@ -1,6 +1,5 @@
 package be.ua.fti.ei.sockets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,22 +10,29 @@ import java.nio.charset.StandardCharsets;
 public class MulticastSocketServer
 {
     private static final Logger logger = LoggerFactory.getLogger(MulticastSocketServer.class);
+
     private final Gson gson;
     private final MulticastSocket socket;
+    private final MessageHandler messageHandler;
+
     private InetAddress address;
     private final int port;
+
     private boolean running;
 
     /**
      * @param multicastIp This is an IPv4 address in the multicast range (224.0.0.0 - 239.255.255.255)
      * @param port This is the port the socket server listens on
      */
-    public MulticastSocketServer(String multicastIp, int port) throws Exception
+    public MulticastSocketServer(String multicastIp, int port, MessageHandler messageHandler) throws Exception
     {
         this.gson = new Gson();
 
         this.address = InetAddress.getByName(multicastIp);
         this.port = port;
+
+        this.messageHandler = messageHandler;
+        this.messageHandler.setServer(this);
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
@@ -72,11 +78,7 @@ public class MulticastSocketServer
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
 
-
-            if(body.getType().equals("ns"))
-            {
-
-            }
+            this.messageHandler.parse(body, received, ip.toString(), port);
         }
 
         this.socket.close();
