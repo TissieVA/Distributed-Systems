@@ -41,6 +41,7 @@ public class Node
             // In IPv4: any address from 224.0.0.0 -> 239.255.255.255 can be used as a multicast address
             // Meaning anyone who joins the same multicast ip-group can receive these messages
             Node.socket = new MulticastSocketServer("230.0.0.7", 6666, new ClientMessageHandler());
+
         }
         catch (Exception ex)
         {
