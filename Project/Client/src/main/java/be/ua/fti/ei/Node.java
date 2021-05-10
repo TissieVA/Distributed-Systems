@@ -49,9 +49,7 @@ public class Node
             // Meaning anyone who joins the same multicast ip-group can receive these messages
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", Node.client.getMulticastPort(),
                     new ClientMessageHandler());
-
             Node.fileSocket = new FileTransferSocket(Node.client.getFileTransferPort());
-
         }
         catch (Exception ex)
         {
