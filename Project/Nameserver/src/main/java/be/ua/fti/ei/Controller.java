@@ -40,10 +40,14 @@ public class Controller
             return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
         }
     }
-    //THE remove node is not yet fully finished needs to implement the next and previous node
+    //The remove node is not yet fully finished, needs to implement the next and previous node
     @GetMapping("/remove/{nodeName}")
     boolean removeNode(@PathVariable String nodeName)
     {
-        return Database.getInstance().removeNode(nodeName);
+        int hash = Hasher.getHash(nodeName);
+        //these two neighbours need to change. The higher neigbour needs to be connected to the lowerNeighbour.
+        int higherNeighbour =Database.getInstance().getHigherNeighbour(hash);
+        int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+        return Database.getInstance().removeNode(nodeName);// remove the node (works)
     }
 }
