@@ -40,7 +40,7 @@ public class Controller
             return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
         }
     }
-
+    //THE remove node is not yet fully finished needs to implement the next and previous node
     @GetMapping("/remove/{nodeName}")
     boolean removeNode(@PathVariable String nodeName)
     {
