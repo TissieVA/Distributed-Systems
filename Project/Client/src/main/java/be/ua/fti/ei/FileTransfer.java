@@ -11,12 +11,12 @@ import java.net.UnknownHostException;
 public class FileTransfer {
 
 
-    public static void transferFileSender(String ipaddres,int port, File file, InetAddress ipb) throws IOException
+    public static void transferFileSender(int port, File file, InetAddress ipb) throws IOException
     {
         //initialize the socket
         ServerSocket clientsocket=new ServerSocket(port);
         Socket socket = clientsocket.accept();
-        InetAddress IA = InetAddress.getByName("localhost");
+        //InetAddress IA = InetAddress.getByName("localhost");
         //FIlE
         FileInputStream fis = new FileInputStream(file);
         BufferedInputStream bis = new BufferedInputStream(fis);
@@ -49,7 +49,7 @@ public class FileTransfer {
     public static void transferFileReciever(String ipaddress,int port) throws IOException
     {
         //initialize socket
-        Socket socket = new Socket(InetAddress.getByName("localhost"),port);
+        Socket socket = new Socket(ipaddress,port);
         byte[] contents = new byte[10000];
         //file outputstrem to the output path
         FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir"));
