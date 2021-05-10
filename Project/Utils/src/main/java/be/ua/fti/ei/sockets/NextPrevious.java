@@ -1,7 +1,9 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.sockets;
 
 
-public class NextPrevious {
+import be.ua.fti.ei.sockets.PublishBody;
+
+public class NextPrevious extends PublishBody implements java.io.Serializable {
 
     private int previous,next,numberOfNodes;
 

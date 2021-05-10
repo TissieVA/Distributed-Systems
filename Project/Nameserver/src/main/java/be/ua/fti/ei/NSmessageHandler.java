@@ -42,4 +42,15 @@ public class NSmessageHandler implements MessageHandler
         this.mss.sendMessage(msg);
 
     }
+
+    public void update()
+    {
+        gson = new Gson();
+
+        NextPrevious nxtprv = new NextPrevious();
+
+        String msg = gson.toJson(nxtprv);
+
+        this.mss.sendMessage(msg);
+    }
 }

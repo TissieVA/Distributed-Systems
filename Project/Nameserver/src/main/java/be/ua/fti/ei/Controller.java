@@ -1,6 +1,7 @@
 package be.ua.fti.ei;
 
 import be.ua.fti.ei.http.PublishBody;
+import be.ua.fti.ei.sockets.NextPrevious;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
