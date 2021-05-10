@@ -23,7 +23,8 @@ public class Node
         return Node.client;
     }
 
-    private static MulticastSocketServer socket;
+    private static MulticastSocketServer multicastSocket;
+    private static FileTransferSocket fileSocket;
 
     public static void main(String[] args)
     {
@@ -40,7 +41,9 @@ public class Node
 
             // In IPv4: any address from 224.0.0.0 -> 239.255.255.255 can be used as a multicast address
             // Meaning anyone who joins the same multicast ip-group can receive these messages
-            Node.socket = new MulticastSocketServer("230.0.0.7", 6666, new ClientMessageHandler());
+            Node.multicastSocket = new MulticastSocketServer("230.0.0.7", 6666, new ClientMessageHandler());
+
+            Node.fileSocket = new FileTransferSocket(6665);
         }
         catch (Exception ex)
         {
@@ -50,10 +53,13 @@ public class Node
             return;
         }
 
-        // Start socket thread
-        Node.socket.getStartThread().start();
+        // Start the multicast socket
+        Node.multicastSocket.getStartThread().start();
         // Search NameServer
         //Node.socket.findNS();
+
+        // Start the file socket
+        Node.fileSocket.getStartThread().start();
 
         logger.info(Node.client.getName() + " started successfully!");
     }
