@@ -1,15 +1,19 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.sockets;
 import java.util.ArrayList;
 
-public class PublishBody
+public class PublishBody extends SocketBody implements java.io.Serializable
 {
     String hostname;
     ArrayList<String> files;
     String ipAddress;
 
-    public PublishBody() { }
+    public PublishBody() {super("find"); }
 
-    public PublishBody(String hostname, ArrayList<String> files, String ipAddress) {
+    public PublishBody(String hostname, ArrayList<String> files, String ipAddress)
+    {
+        //  [Ander project] (zelfde project)
+        //  [MulticastSocket] - [A: MessageHandler] - (NodeMessageHandler)
+        super("find");
         this.hostname = hostname;
         this.files = files;
         this.ipAddress = ipAddress;

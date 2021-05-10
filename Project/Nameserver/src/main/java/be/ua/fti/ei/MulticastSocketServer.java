@@ -1,10 +1,9 @@
 package be.ua.fti.ei;
 
 import be.ua.fti.ei.sockets.NameServerResponseBody;
+import be.ua.fti.ei.sockets.PublishBody;
 import be.ua.fti.ei.sockets.SocketBody;
-
 import com.google.gson.Gson;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,9 @@ import java.nio.charset.StandardCharsets;
 public class MulticastSocketServer
 {
     private static final Logger logger = LoggerFactory.getLogger(MulticastSocketServer.class);
+
     private final Gson gson;
+
     private final MulticastSocket socket;
     private InetAddress address;
     private final int port;
@@ -75,21 +76,9 @@ public class MulticastSocketServer
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
 
-            if(body.getType().equals("ns"))
+            if(body.getType().equals("find"))
             {
-                NameServerResponseBody nsbody = this.gson.fromJson(received, NameServerResponseBody.class);
-
-                // Debug this code!!!!!!
-                String nsurl = "http://" + ip.getHostAddress() + ":" + nsbody.getPort();
-                Node.getClient().setNameServerAddress(nsurl);
-
-                // 1. Find files on this server
-                // 2. Publish (HttpRequester)
-                // PublishBody pb = new PublishBody();
-                // HttpRequester.httpRequestPOST(Node.getClient().getNameServerAddress() + "/publish",
-                //         this.gson.toJson(pb));
-
-                // NS Socket -->udp-> RENEGOTIATE
+                respondToFindNS();
             }
         }
 
@@ -99,12 +88,13 @@ public class MulticastSocketServer
     /**
      * Send a multicast message to find the Name Server
      */
-    public void findNS()
+    public void respondToFindNS()
     {
-        SocketBody sb = new SocketBody();
-        sb.setType("find");
+        NameServerResponseBody nsrb = new NameServerResponseBody();
+        nsrb.setType("ns");
+        nsrb.setPort(8080);
 
-        String msg = this.gson.toJson(sb);
+        String msg = this.gson.toJson(nsrb);
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
