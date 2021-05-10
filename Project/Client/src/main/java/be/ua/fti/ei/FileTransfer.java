@@ -59,10 +59,11 @@ public class FileTransfer {
         int bytesRead = 0;
         while((bytesRead = is.read(contents))!=-1)
         {
-
+            bos.write(contents,0,bytesRead);
         }
-
-
+        bos.flush();
+        socket.close();
+        System.out.println("files save succesfull");
     }
 
 
