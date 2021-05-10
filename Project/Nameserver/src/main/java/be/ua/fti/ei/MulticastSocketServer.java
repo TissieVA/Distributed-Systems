@@ -1,18 +1,22 @@
-package be.ua.fti.ei.sockets;
+package be.ua.fti.ei;
 
+import be.ua.fti.ei.sockets.NameServerResponseBody;
+import be.ua.fti.ei.sockets.PublishBody;
+import be.ua.fti.ei.sockets.SocketBody;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 public class MulticastSocketServer
 {
     private static final Logger logger = LoggerFactory.getLogger(MulticastSocketServer.class);
-    private final Gson gson;
-    private final MulticastSocket socket;
-    private final MessageHandler messageHandler;
 
+    private final Gson gson;
+
+    private final MulticastSocket socket;
     private InetAddress address;
     private final int port;
     private boolean running;
@@ -21,15 +25,12 @@ public class MulticastSocketServer
      * @param multicastIp This is an IPv4 address in the multicast range (224.0.0.0 - 239.255.255.255)
      * @param port This is the port the socket server listens on
      */
-    public MulticastSocketServer(String multicastIp, int port, MessageHandler messageHandler) throws Exception
+    public MulticastSocketServer(String multicastIp, int port) throws Exception
     {
         this.gson = new Gson();
 
         this.address = InetAddress.getByName(multicastIp);
         this.port = port;
-
-        this.messageHandler = messageHandler;
-        this.messageHandler.setServer(this);
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
@@ -75,17 +76,25 @@ public class MulticastSocketServer
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
 
-            this.messageHandler.parse(body, received, ip.toString(), port);
+            if(body.getType().equals("find"))
+            {
+                respondToFindNS();
+            }
         }
 
         this.socket.close();
     }
 
     /**
-     * Send a multicast message
+     * Send a multicast message to find the Name Server
      */
-    public void sendMessage(String msg)
+    public void respondToFindNS()
     {
+        NameServerResponseBody nsrb = new NameServerResponseBody();
+        nsrb.setType("ns");
+        nsrb.setPort(8080);
+
+        String msg = this.gson.toJson(nsrb);
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
         DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
