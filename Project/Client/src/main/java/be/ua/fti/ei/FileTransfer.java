@@ -50,9 +50,18 @@ public class FileTransfer {
     {
         //initialize socket
         Socket socket = new Socket(InetAddress.getByName("localhost"),port);
-        byte[] contents =new byte[10000];
+        byte[] contents = new byte[10000];
         //file outputstrem to the output path
-        FileOutputStream fileOutputStream=new FileOutputStream("");
+        FileOutputStream fileOutputStream = new FileOutputStream(System.getProperty("user.dir"));
+        BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+        InputStream is = socket.getInputStream();
+        //no of butes read in one read call
+        int bytesRead = 0;
+        while((bytesRead = is.read(contents))!=-1)
+        {
+
+        }
+
 
     }
 
