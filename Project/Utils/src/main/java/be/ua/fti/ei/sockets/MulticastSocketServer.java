@@ -55,6 +55,8 @@ public class MulticastSocketServer
         // When things break increase this value
         byte[] buf = new byte[256];
 
+        this.messageHandler.onServerStart();
+
         while(this.running)
         {
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
@@ -75,7 +77,7 @@ public class MulticastSocketServer
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
 
-            this.messageHandler.parse(body, received, ip.toString(), port);
+            this.messageHandler.parse(body, received, ip.getHostAddress(), port);
         }
 
         this.socket.close();
@@ -99,6 +101,26 @@ public class MulticastSocketServer
             logger.error(ex.getMessage());
         }
     }
+
+    /**
+     * Send a multicast message
+     */
+    public void sendMessage(String msg, String ipaddress, int port)
+    {
+        byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
+
+        try
+        {
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(ipaddress), port);
+            this.socket.send(packet);
+        }
+        catch (Exception ex)
+        {
+            logger.error(ex.getMessage());
+        }
+    }
+
+
 
     /**
      * Stop the socket server
