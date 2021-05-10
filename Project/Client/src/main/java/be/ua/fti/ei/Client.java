@@ -1,5 +1,6 @@
 package be.ua.fti.ei;
 
+import java.net.NetworkInterface;
 import java.util.ArrayList;
 
 public class Client
@@ -11,6 +12,19 @@ public class Client
     private int previousId;
     private int nextId;
     private String nameServerAddress;
+    private int fileTransferPort;
+    private int multicastPort;
+
+    public Client(NodeConfig config) throws Exception
+    {
+        this.name = config.getName();
+
+        var inet = NetworkInterface.getByName(config.getIfName()).getInetAddresses();
+        if(inet.hasMoreElements()) this.ipaddress = inet.nextElement().getHostAddress();
+
+        this.fileTransferPort = config.getFileTransferPort();
+        this.multicastPort = config.getMulticastPort();
+    }
 
     public Client(String name, String ipaddress, ArrayList<String> files)
     {
@@ -87,5 +101,21 @@ public class Client
     public void setNameServerAddress(String nameServerAddress)
     {
         this.nameServerAddress = nameServerAddress;
+    }
+
+    public int getFileTransferPort() {
+        return fileTransferPort;
+    }
+
+    public void setFileTransferPort(int fileTransferPort) {
+        this.fileTransferPort = fileTransferPort;
+    }
+
+    public int getMulticastPort() {
+        return multicastPort;
+    }
+
+    public void setMulticastPort(int multicastPort) {
+        this.multicastPort = multicastPort;
     }
 }
