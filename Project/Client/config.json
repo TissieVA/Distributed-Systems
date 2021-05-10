@@ -1,6 +1,6 @@
 {
   "name": "TestNode",
-  "ifName": "eth11",
+  "ifName": "eth0",
   "fileTransferPort": 6665,
   "multicastPort": 6666
 }
