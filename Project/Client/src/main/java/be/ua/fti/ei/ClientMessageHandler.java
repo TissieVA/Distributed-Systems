@@ -15,7 +15,6 @@ public class ClientMessageHandler implements MessageHandler
         if(sb.getType().equals("ns"))
         {
             NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
-
         }
     }
 
@@ -26,7 +25,7 @@ public class ClientMessageHandler implements MessageHandler
         this.mss = mss;
     }
 
-    public static void sendFindNS()
+    public void sendFindNS()
     {
         gson = new Gson();
 
@@ -35,11 +34,12 @@ public class ClientMessageHandler implements MessageHandler
 
         String msg = gson.toJson(sb);
 
-        // multisocketserver  sendmessage
+        this.mss.sendMessage(msg);
+
     }
 
 
-    public static void sendAddNodeRestRequest() throws JsonProcessingException
+    public void sendAddNodeRestRequest() throws JsonProcessingException
     {
         PublishBody pb = new PublishBody(Node.getClient().getName(), Node.getClient().getFiles(), Node.getClient().getIpaddress());
         String json = gson.toJson(pb);
