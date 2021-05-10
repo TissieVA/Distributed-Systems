@@ -1,18 +1,32 @@
 package be.ua.fti.ei;
 
+import java.util.ArrayList;
+
 public class Client
 {
     private String name;
     private String ipaddress;
+    private ArrayList<String> files;
     private int id;
     private int previousId;
     private int nextId;
     private String nameServerAddress;
 
-    public Client(String name, String ipaddress)
+    public Client(String name, String ipaddress, ArrayList<String> files)
     {
         this.name = name;
         this.ipaddress = ipaddress;
+        this.files = files;
+    }
+
+    public ArrayList<String> getFiles()
+    {
+        return files;
+    }
+
+    public void setFiles(ArrayList<String> files)
+    {
+        this.files = files;
     }
 
     public String getName()

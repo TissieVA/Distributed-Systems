@@ -28,7 +28,7 @@
 	</dependency>
 	<dependency>
             <groupId>be.ua.fti.ei</groupId>
-            <artifactId>Bodies</artifactId>
+            <artifactId>Utils</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
