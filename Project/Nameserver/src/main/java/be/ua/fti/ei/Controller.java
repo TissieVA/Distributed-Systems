@@ -1,5 +1,6 @@
 package be.ua.fti.ei;
 
+import be.ua.fti.ei.http.NextPrevious;
 import be.ua.fti.ei.http.PublishBody;
 import org.springframework.web.bind.annotation.*;
 

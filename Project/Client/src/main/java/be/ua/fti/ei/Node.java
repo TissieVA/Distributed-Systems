@@ -44,6 +44,7 @@ public class Node
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", 6666, new ClientMessageHandler());
 
             Node.fileSocket = new FileTransferSocket(6665);
+
         }
         catch (Exception ex)
         {
