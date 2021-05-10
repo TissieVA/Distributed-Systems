@@ -55,6 +55,8 @@ public class MulticastSocketServer
         // When things break increase this value
         byte[] buf = new byte[256];
 
+        this.messageHandler.onServerStart();
+
         while(this.running)
         {
             DatagramPacket packet = new DatagramPacket(buf, buf.length);

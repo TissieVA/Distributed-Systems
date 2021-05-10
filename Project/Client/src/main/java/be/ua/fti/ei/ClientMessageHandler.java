@@ -13,15 +13,17 @@ public class ClientMessageHandler implements MessageHandler
     private static Gson gson;
     private MulticastSocketServer mss;
 
-    public ClientMessageHandler()
-    {
-        sendFindNS();
-    }
 
     @Override
     public void setServer(MulticastSocketServer mss)
     {
         this.mss = mss;
+    }
+
+    @Override
+    public void onServerStart()
+    {
+        sendFindNS();
     }
 
     @Override
