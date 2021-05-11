@@ -1,6 +1,6 @@
 package be.ua.fti.ei;
 
-import be.ua.fti.ei.http.NextPrevious;
+import be.ua.fti.ei.sockets.NextPreviousBody;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
@@ -90,24 +90,42 @@ public class Database
         return false;
     }
 
-    public NextPrevious getNextPrevious(String hostname)
+    public boolean removeNode(int hash)
     {
-        return getNextPrevious(Hasher.getHash(hostname));
+        if(this.hostDatabase.containsKey(hash))
+        {
+            Iterator it =this.localFileDatabase.entrySet().iterator();
+            while (it.hasNext())
+            {
+                Map.Entry me= (Map.Entry) it.next();
+                if(me.getValue().equals(hash))
+                    it.remove();
+            }
+            this.hostDatabase.remove(hash);
+            outputXML();
+
+            return true;
+        }
+        return false;
     }
 
-    public NextPrevious getNextPrevious(int hash)
+    public NextPreviousBody getNeighbours(String hostname)
     {
-        int hosts = Database.getInstance().getHostDatabase().size();
+        return getNeighbours(Hasher.getHash(hostname));
+    }
 
-        if (hosts == 1)
+    public NextPreviousBody getNeighbours(int hash)
+    {
+
+        if (Database.getInstance().getHostDatabase().size() == 1)
         {
-            return new NextPrevious(hash, hash, hosts);
+            return new NextPreviousBody(hash, hash);
         }
         else
         {
             int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
             int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
-            return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
+            return new NextPreviousBody(lowerNeighbour, higherNeighbour);
         }
     }
 

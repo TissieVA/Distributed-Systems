@@ -5,12 +5,11 @@ import be.ua.fti.ei.sockets.PublishBody;
 
 public class NextPreviousBody extends PublishBody implements java.io.Serializable {
 
-    private int previous,next,numberOfNodes;
+    private int previous,next;
 
-    public NextPreviousBody(int previous, int next, int numberOfNodes) {
+    public NextPreviousBody(int previous, int next) {
         this.previous = previous;
         this.next = next;
-        this.numberOfNodes = numberOfNodes;
     }
 
     public NextPreviousBody() { }
@@ -29,13 +28,5 @@ public class NextPreviousBody extends PublishBody implements java.io.Serializabl
 
     public void setNext(int next) {
         this.next = next;
-    }
-
-    public int getNumberOfNodes() {
-        return numberOfNodes;
-    }
-
-    public void setNumberOfNodes(int numberOfNodes) {
-        this.numberOfNodes = numberOfNodes;
     }
 }
