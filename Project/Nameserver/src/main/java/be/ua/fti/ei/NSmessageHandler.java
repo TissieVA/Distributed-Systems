@@ -21,6 +21,9 @@ public class NSmessageHandler implements MessageHandler
     }
 
     @Override
+    public void onServerStart(){}
+
+    @Override
     public void parse(SocketBody sb, String msg, String ip, int port)
     {
         if(sb.getType().equals("find"))
@@ -47,7 +50,7 @@ public class NSmessageHandler implements MessageHandler
     {
         gson = new Gson();
 
-        NextPrevious nxtprv = new NextPrevious();
+        NextPreviousBody nxtprv = new NextPreviousBody();
 
         String msg = gson.toJson(nxtprv);
 

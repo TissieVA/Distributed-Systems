@@ -2,7 +2,6 @@ package be.ua.fti.ei;
 
 import be.ua.fti.ei.http.NextPrevious;
 import be.ua.fti.ei.http.PublishBody;
-import be.ua.fti.ei.sockets.NextPrevious;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,20 +25,7 @@ public class Controller
         if(!Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress()))
             return null;
 
-        // If no other nodes exist => nextID = requester, previousID = requester
-        int hosts = Database.getInstance().getHostDatabase().size();
-        int hash = Hasher.getHash(body.getHostname());
-
-        if (hosts == 1)
-        {
-            return new NextPrevious(hash, hash, hosts);
-        }
-        else
-        {
-            int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
-            int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
-            return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
-        }
+        return Database.getInstance().getNextPrevious(body.getHostname());
     }
 
     @GetMapping("/remove/{nodeName}")

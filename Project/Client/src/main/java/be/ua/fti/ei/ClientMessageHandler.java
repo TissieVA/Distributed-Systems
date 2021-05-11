@@ -32,7 +32,7 @@ public class ClientMessageHandler implements MessageHandler
         if(sb.getType().equals("ns"))
         {
             NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
-            String NameServerAddress = "https://" + ip + ":" + nsrb.getPort();
+            String NameServerAddress = "http://" + ip + ":" + nsrb.getPort();
             Node.getClient().setNameServerAddress(NameServerAddress);
             try
             {
@@ -42,8 +42,6 @@ public class ClientMessageHandler implements MessageHandler
                 logger.error(e.getMessage());
             }
         }
-
-
     }
 
     public void sendFindNS()
@@ -56,7 +54,6 @@ public class ClientMessageHandler implements MessageHandler
         String msg = gson.toJson(sb);
 
         this.mss.sendMessage(msg);
-
     }
 
 

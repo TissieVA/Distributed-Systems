@@ -1,5 +1,7 @@
 package be.ua.fti.ei;
 
+import be.ua.fti.ei.http.NextPrevious;
+
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
@@ -54,7 +56,7 @@ public class Database
             return false;
         }
 
-        this.hostDatabase.put(hash,new Node(hostname, ipAddress));
+        this.hostDatabase.put(hash, new Node(hostname, ipAddress));
 
         System.out.println("hostname: " + hostname + "=" + hash);
 
@@ -70,7 +72,6 @@ public class Database
 
     public boolean removeNode(String nodeName)
     {
-
         int hash = Hasher.getHash(nodeName);
         if(this.hostDatabase.containsKey(hash))
         {
@@ -87,6 +88,27 @@ public class Database
             return true;
         }
         return false;
+    }
+
+    public NextPrevious getNextPrevious(String hostname)
+    {
+        return getNextPrevious(Hasher.getHash(hostname));
+    }
+
+    public NextPrevious getNextPrevious(int hash)
+    {
+        int hosts = Database.getInstance().getHostDatabase().size();
+
+        if (hosts == 1)
+        {
+            return new NextPrevious(hash, hash, hosts);
+        }
+        else
+        {
+            int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
+            int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+            return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
+        }
     }
 
     public int getHigherNeighbour(String hostName)
@@ -139,7 +161,6 @@ public class Database
 
         return FileHandler.writeToFile("Database.xml",mapToString);
     }
-
 
     private static Database instance;
 
