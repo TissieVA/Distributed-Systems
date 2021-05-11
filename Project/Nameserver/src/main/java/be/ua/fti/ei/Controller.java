@@ -25,20 +25,7 @@ public class Controller
         if(!Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress()))
             return null;
 
-        // If no other nodes exist => nextID = requester, previousID = requester
-        int hosts = Database.getInstance().getHostDatabase().size();
-        int hash = Hasher.getHash(body.getHostname());
-
-        if (hosts == 1)
-        {
-            return new NextPrevious(hash, hash, hosts);
-        }
-        else
-        {
-            int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
-            int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
-            return new NextPrevious(lowerNeighbour, higherNeighbour, hosts);
-        }
+        return Database.getInstance().getNextPrevious(body.getHostname());
     }
     //The remove node is not yet fully finished, needs to implement the next and previous node
     @GetMapping("/remove/{nodeName}")
