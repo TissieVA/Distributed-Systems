@@ -16,6 +16,7 @@ public class NSmessageHandler implements MessageHandler
     @Override
     public void setServer(MulticastSocketServer mss)
     {
+        logger.info("Socketserver set");
         this.mss = mss;
     }
 
@@ -27,6 +28,7 @@ public class NSmessageHandler implements MessageHandler
     {
         if(sb.getType().equals("find"))
         {
+            logger.info("find message received");
             sendNS();
         }
     }
@@ -38,7 +40,7 @@ public class NSmessageHandler implements MessageHandler
         NameServerResponseBody nsb = new NameServerResponseBody(8080);
 
         String msg = gson.toJson(nsb);
-
+        logger.info("send this is nameserver message");
         this.mss.sendMessage(msg);
 
     }
@@ -48,6 +50,7 @@ public class NSmessageHandler implements MessageHandler
      */
     public void updateNeigboursAfterDeletion(int nodeId)
     {
+        logger.info("Updating neighbouring nodes");
         gson = new Gson();
 
         int nextID = Database.getInstance().getHigherNeighbour(nodeId);
