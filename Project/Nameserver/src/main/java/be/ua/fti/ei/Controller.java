@@ -33,7 +33,7 @@ public class Controller
     {
         int hash = Hasher.getHash(nodeName);
 
-        NSmessageHandler.getInstance().updateNeigboursAfterDeletion(hash);
+        NSmessageHandler.getInstance().updateNeighboursAfterDeletion(hash);
 
         return Database.getInstance().removeNode(nodeName);// remove the node (works)
     }

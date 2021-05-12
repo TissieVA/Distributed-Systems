@@ -46,7 +46,7 @@ public class NSmessageHandler implements MessageHandler
     /**
      * @param nodeId  is the to be deleted node hash
      */
-    public void updateNeigboursAfterDeletion(int nodeId)
+    public void updateNeighboursAfterDeletion(int nodeId)
     {
         gson = new Gson();
 
