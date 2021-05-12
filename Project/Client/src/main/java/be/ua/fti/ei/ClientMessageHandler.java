@@ -1,6 +1,7 @@
 package be.ua.fti.ei;
 
 import be.ua.fti.ei.sockets.*;
+import be.ua.fti.ei.http.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -64,7 +65,8 @@ public class ClientMessageHandler implements MessageHandler
     {
         logger.info("sen publish request");
         PublishBody pb = new PublishBody(Node.getClient().getName(), Node.getClient().getFiles(),
-                Node.getClient().getIpaddress());
+                Node.getClient().getIpaddress(), Node.getClient().getMulticastPort(),
+                Node.getClient().getFileTransferPort());
 
         String json = gson.toJson(pb);
 

@@ -7,17 +7,23 @@ public class PublishBody implements java.io.Serializable
     ArrayList<String> files;
     String ipAddress;
 
+    int mcPort;
+    int filePort;
+
     public PublishBody()
     {
         super();
     }
 
-    public PublishBody(String hostname, ArrayList<String> files, String ipAddress) {
+    public PublishBody(String hostname, ArrayList<String> files, String ipAddress, int mcPort, int filePort)
+    {
         super();
 
         this.hostname = hostname;
         this.files = files;
         this.ipAddress = ipAddress;
+        this.mcPort = mcPort;
+        this.filePort = filePort;
     }
 
     public String getHostname() {
@@ -42,5 +48,25 @@ public class PublishBody implements java.io.Serializable
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public int getMcPort()
+    {
+        return mcPort;
+    }
+
+    public void setMcPort(int mcPort)
+    {
+        this.mcPort = mcPort;
+    }
+
+    public int getFilePort()
+    {
+        return filePort;
+    }
+
+    public void setFilePort(int filePort)
+    {
+        this.filePort = filePort;
     }
 }

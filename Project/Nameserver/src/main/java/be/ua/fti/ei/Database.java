@@ -43,7 +43,7 @@ public class Database
         return this.hostDatabase.get(sortedKeys.get(sortedKeys.size()-1));
     }
 
-    public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress)
+    public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress, int mcPort, int filePort)
     {
 
         if (this.hostDatabase.values().stream().anyMatch(x -> x.getIpaddress().equals(ipAddress)))
@@ -56,7 +56,7 @@ public class Database
             return false;
         }
 
-        this.hostDatabase.put(hash, new Node(hostname, ipAddress));
+        this.hostDatabase.put(hash, new Node(hostname, ipAddress, mcPort, filePort));
 
         System.out.println("hostname: " + hostname + "=" + hash);
 
