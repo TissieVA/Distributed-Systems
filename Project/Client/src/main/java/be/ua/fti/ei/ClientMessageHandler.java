@@ -1,6 +1,5 @@
 package be.ua.fti.ei;
 
-import be.ua.fti.ei.http.NextPrevious;
 import be.ua.fti.ei.sockets.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
@@ -64,8 +63,8 @@ public class ClientMessageHandler implements MessageHandler
 
         String json = gson.toJson(pb);
 
-        NextPrevious np = (NextPrevious) HttpRequester.
-                POST(Node.getClient().getNameServerAddress() + "/publish", json, NextPrevious.class);
+        NextPreviousBody np = (NextPreviousBody) HttpRequester.
+                POST(Node.getClient().getNameServerAddress() + "/publish", json, NextPreviousBody.class);
 
         Node.getClient().setNextId(np.getNext());
         Node.getClient().setPreviousId(np.getPrevious());

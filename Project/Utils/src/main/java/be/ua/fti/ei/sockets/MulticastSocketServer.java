@@ -105,7 +105,7 @@ public class MulticastSocketServer
     /**
      * Send a multicast message
      */
-    public void sendMessage(String msg, String ipaddress, int port)
+    public void sendUnicastMessage(String msg, String ipaddress, int port)
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
