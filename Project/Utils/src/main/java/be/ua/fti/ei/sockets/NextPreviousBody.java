@@ -1,7 +1,7 @@
 package be.ua.fti.ei.sockets;
 
 
-import be.ua.fti.ei.sockets.PublishBody;
+import be.ua.fti.ei.http.PublishBody;
 
 public class NextPreviousBody extends PublishBody implements java.io.Serializable {
 
