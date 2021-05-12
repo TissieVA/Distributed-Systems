@@ -56,6 +56,7 @@ public class ClientMessageHandler implements MessageHandler
 
         String msg = gson.toJson(sb);
         logger.info("send where is ns message");
+        logger.info(msg);
         this.mss.sendMessage(msg);
     }
 

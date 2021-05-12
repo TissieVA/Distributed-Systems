@@ -3,6 +3,7 @@ package be.ua.fti.ei;
 import java.net.NetworkInterface;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Client
 {

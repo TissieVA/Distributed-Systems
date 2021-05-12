@@ -29,11 +29,11 @@ public class NSmessageHandler implements MessageHandler
         if(sb.getType().equals("find"))
         {
             logger.info("find message received");
-            sendNS();
+            sendNS(ip, port);
         }
     }
 
-    public void sendNS()
+    public void sendNS(String ip, int port)
     {
         gson = new Gson();
 
@@ -41,7 +41,7 @@ public class NSmessageHandler implements MessageHandler
 
         String msg = gson.toJson(nsb);
         logger.info("send this is nameserver message");
-        this.mss.sendMessage(msg);
+        this.mss.sendUnicastMessage(msg,ip,port);
 
     }
 

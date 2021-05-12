@@ -90,7 +90,7 @@ public class MulticastSocketServer
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, 6667);
 
         try
         {
