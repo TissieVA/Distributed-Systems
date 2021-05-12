@@ -22,11 +22,13 @@ public class Controller
     @PostMapping("/publish")
     NextPreviousBody publishNewNode(@RequestBody PublishBody body)
     {
-        if(!Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress()))
+        if(!Database.getInstance().addNewNode(body.getHostname(), body.getFiles(), body.getIpAddress(),
+                body.getMcPort(), body.getFilePort()))
             return null;
 
         return Database.getInstance().getNeighbours(body.getHostname());
     }
+
     //The remove node is not yet fully finished, needs to implement the next and previous node
     @GetMapping("/remove/{nodeName}")
     boolean removeNode(@PathVariable String nodeName)
