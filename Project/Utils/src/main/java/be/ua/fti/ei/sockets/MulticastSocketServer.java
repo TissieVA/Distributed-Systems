@@ -94,6 +94,7 @@ public class MulticastSocketServer
 
         try
         {
+            logger.info(packet.toString());
             this.socket.send(packet);
         }
         catch (Exception ex)
