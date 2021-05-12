@@ -4,12 +4,15 @@ import be.ua.fti.ei.http.PublishBody;
 import be.ua.fti.ei.sockets.NextPreviousBody;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class Controller
 {
     @GetMapping("/find/{filename}")
-    Node getFile(@PathVariable String filename)
+    Node getFile(@PathVariable String filename, HttpServletRequest request)
     {
+        String addr = request.getRemoteAddr();
         return Database.getInstance().searchFile(filename);
     }
 
@@ -37,6 +40,6 @@ public class Controller
 
         NSmessageHandler.getInstance().updateNeighboursAfterDeletion(hash);
 
-        return Database.getInstance().removeNode(nodeName);// remove the node (works)
+        return Database.getInstance().removeNode(nodeName); // remove the node (works)
     }
 }
