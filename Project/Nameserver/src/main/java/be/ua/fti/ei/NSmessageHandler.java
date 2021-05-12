@@ -48,7 +48,7 @@ public class NSmessageHandler implements MessageHandler
     /**
      * @param nodeId  is the to be deleted node hash
      */
-    public void updateNeigboursAfterDeletion(int nodeId)
+    public void updateNeighboursAfterDeletion(int nodeId)
     {
         logger.info("Updating neighbouring nodes");
         gson = new Gson();
@@ -56,17 +56,22 @@ public class NSmessageHandler implements MessageHandler
         int nextID = Database.getInstance().getHigherNeighbour(nodeId);
         int prevID = Database.getInstance().getLowerNeighbour(nodeId);
 
+        Node next = Database.getInstance().getHostDatabase().get(nextID);
+        Node prev = Database.getInstance().getHostDatabase().get(nextID);
+
         Database.getInstance().removeNode(nodeId);
 
         // Send message to higherNeighbour to update its neighbours
         NextPreviousBody toHigherNeighbour = Database.getInstance().getNeighbours(nextID);
         String msg = gson.toJson(toHigherNeighbour);
-        this.mss.sendUnicastMessage(msg, Database.getInstance().getHostDatabase().get(nextID).getIpaddress(),6666);
 
-        //send message to lowerNeighbour to update its neighbours
+        this.mss.sendUnicastMessage(msg, next.getIpaddress(), next.getMcPort());
+
+        // Send message to lowerNeighbour to update its neighbours
         NextPreviousBody toLowerNeighbour = Database.getInstance().getNeighbours(prevID);
         msg = gson.toJson(toLowerNeighbour);
-        this.mss.sendUnicastMessage(msg, Database.getInstance().getHostDatabase().get(prevID).getIpaddress(),6666);
+
+        this.mss.sendUnicastMessage(msg, prev.getIpaddress(), prev.getMcPort());
 
     }
 
