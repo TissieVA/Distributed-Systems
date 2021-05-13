@@ -43,6 +43,8 @@ public class MulticastSocketServer
             System.out.println("HERE");
             System.out.println(nets.getDisplayName());
         }
+        System.out.println(NetworkInterface.getByName("ethwe0"));
+        System.out.println(NetworkInterface.getByName("dqq"));
         this.socket.joinGroup(address, NetworkInterface.getByName("ethwe0"));
     }
 
@@ -73,6 +75,7 @@ public class MulticastSocketServer
 
             try
             {
+                logger.info("package received");
                 this.socket.receive(packet);
             }
             catch(Exception ex)
