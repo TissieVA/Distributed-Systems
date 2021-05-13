@@ -43,7 +43,7 @@ public class MulticastSocketServer
             System.out.println("HERE");
             System.out.println(nets.getDisplayName());
         }
-        this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
+        this.socket.joinGroup(address, NetworkInterface.getByName("ethwe0"));
     }
 
     /**
