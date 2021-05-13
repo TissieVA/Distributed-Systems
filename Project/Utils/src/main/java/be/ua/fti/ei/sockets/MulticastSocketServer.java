@@ -40,6 +40,7 @@ public class MulticastSocketServer
                 .list(NetworkInterface.getNetworkInterfaces());
         for (NetworkInterface nets  : interfaces)
         {
+            System.out.println("HERE");
             System.out.println(nets.getDisplayName());
         }
         this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
