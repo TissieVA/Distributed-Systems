@@ -22,6 +22,7 @@ public class Client
         this.name = config.getName();
 
         var inet = NetworkInterface.getByName(config.getIfName()).getInetAddresses();
+        System.out.println(inet);
         if(inet.hasMoreElements()) this.ipaddress = inet.nextElement().getHostAddress();
 
         this.fileTransferPort = config.getFileTransferPort();

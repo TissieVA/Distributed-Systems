@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+
 public class MulticastSocketServer
 {
     private static final Logger logger = LoggerFactory.getLogger(MulticastSocketServer.class);
@@ -33,6 +34,7 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
+        System.out.println(NetworkInterface.getByIndex(0));
         this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
     }
 
@@ -94,7 +96,7 @@ public class MulticastSocketServer
 
         try
         {
-            logger.info(packet.toString());
+            logger.info(packet.getAddress().toString());
             this.socket.send(packet);
         }
         catch (Exception ex)
