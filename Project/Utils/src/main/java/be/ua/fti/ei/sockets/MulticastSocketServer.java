@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class MulticastSocketServer
@@ -34,7 +36,12 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
-        System.out.println(NetworkInterface.getByIndex(0));
+        ArrayList<NetworkInterface> interfaces = Collections
+                .list(NetworkInterface.getNetworkInterfaces());
+        for (NetworkInterface nets  : interfaces)
+        {
+            System.out.println(nets.getDisplayName());
+        }
         this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
     }
 
