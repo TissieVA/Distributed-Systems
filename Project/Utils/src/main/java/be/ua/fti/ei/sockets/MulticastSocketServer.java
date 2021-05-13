@@ -36,13 +36,7 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
-        ArrayList<NetworkInterface> interfaces = Collections
-                .list(NetworkInterface.getNetworkInterfaces());
-        for (NetworkInterface nets  : interfaces)
-        {
-            System.out.println("HERE");
-            System.out.println(nets.getDisplayName());
-        }
+        logger.info("39: "+NetworkInterface.getByIndex(0));
         this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
     }
 
