@@ -25,7 +25,7 @@ public class Client
         System.out.println("inet");
         System.out.println(inet);
         if(inet.hasMoreElements()) this.ipaddress = inet.nextElement().getHostAddress();
-
+        System.out.println(this.ipaddress);
         this.fileTransferPort = config.getFileTransferPort();
         this.multicastPort = config.getMulticastPort();
     }
