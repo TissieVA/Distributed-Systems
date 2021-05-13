@@ -43,8 +43,7 @@ public class MulticastSocketServer
             System.out.println("HERE");
             System.out.println(nets.getDisplayName());
         }
-        System.out.println(NetworkInterface.getByName("ethwe0"));
-        System.out.println(NetworkInterface.getByName("dqq"));
+
         this.socket.joinGroup(address, NetworkInterface.getByName("ethwe0"));
     }
 
@@ -89,7 +88,7 @@ public class MulticastSocketServer
 
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
-
+            logger.info("Received message type: " + body.getType());
             this.messageHandler.parse(body, received, ip.getHostAddress(), port);
         }
 
