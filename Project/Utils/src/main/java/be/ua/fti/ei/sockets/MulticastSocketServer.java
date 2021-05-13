@@ -40,11 +40,10 @@ public class MulticastSocketServer
                 .list(NetworkInterface.getNetworkInterfaces());
         for (NetworkInterface nets  : interfaces)
         {
-            System.out.println("HERE");
             System.out.println(nets.getDisplayName());
         }
 
-        this.socket.joinGroup(address, NetworkInterface.getByName("ethwe0"));
+        this.socket.joinGroup(address, NetworkInterface.getByName("eth1"));
     }
 
     /**
@@ -74,7 +73,6 @@ public class MulticastSocketServer
 
             try
             {
-                logger.info("package received");
                 this.socket.receive(packet);
             }
             catch(Exception ex)
