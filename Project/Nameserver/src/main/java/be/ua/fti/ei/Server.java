@@ -15,7 +15,7 @@ public class Server
 
         try
         {
-            Server.multicastSocket = new MulticastSocketServer("230.0.0.7", 6666,
+            Server.multicastSocket = new MulticastSocketServer("230.0.0.7", 6667,
                     NSmessageHandler.getInstance());
         }
         catch (Exception e)

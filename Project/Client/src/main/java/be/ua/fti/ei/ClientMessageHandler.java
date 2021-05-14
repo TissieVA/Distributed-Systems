@@ -18,11 +18,13 @@ public class ClientMessageHandler implements MessageHandler
     public void setServer(MulticastSocketServer mss)
     {
         this.mss = mss;
+        logger.info("Server set");
     }
 
     @Override
     public void onServerStart()
     {
+        logger.info("sendFindNS");
         sendFindNS();
     }
 
@@ -31,6 +33,8 @@ public class ClientMessageHandler implements MessageHandler
     {
         if(sb.getType().equals("ns"))
         {
+            logger.info("ns message received");
+
             NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
             String NameServerAddress = "http://" + ip + ":" + nsrb.getPort();
             Node.getClient().setNameServerAddress(NameServerAddress);
@@ -52,13 +56,15 @@ public class ClientMessageHandler implements MessageHandler
         sb.setType("find");
 
         String msg = gson.toJson(sb);
-
+        logger.info("send where is ns message");
+        logger.info(msg);
         this.mss.sendMessage(msg);
     }
 
 
     public void sendAddNodeRestRequest() throws JsonProcessingException
     {
+        logger.info("sen publish request");
         PublishBody pb = new PublishBody(Node.getClient().getName(), Node.getClient().getFiles(),
                 Node.getClient().getIpaddress(), Node.getClient().getMulticastPort(),
                 Node.getClient().getFileTransferPort());

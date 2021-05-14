@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class MulticastSocketServer
 {
@@ -33,7 +36,14 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress address = new InetSocketAddress(this.address, this.port);
-        this.socket.joinGroup(address, NetworkInterface.getByIndex(0));
+        ArrayList<NetworkInterface> interfaces = Collections
+                .list(NetworkInterface.getNetworkInterfaces());
+        for (NetworkInterface nets  : interfaces)
+        {
+            System.out.println(nets.getDisplayName());
+        }
+
+        this.socket.joinGroup(address, NetworkInterface.getByName("eth1"));
     }
 
     /**
@@ -76,7 +86,7 @@ public class MulticastSocketServer
 
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
-
+            logger.info("Received message type: " + body.getType());
             this.messageHandler.parse(body, received, ip.getHostAddress(), port);
         }
 
@@ -90,10 +100,11 @@ public class MulticastSocketServer
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, this.port);
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, 6667);
 
         try
         {
+            logger.info(packet.getAddress().toString());
             this.socket.send(packet);
         }
         catch (Exception ex)
