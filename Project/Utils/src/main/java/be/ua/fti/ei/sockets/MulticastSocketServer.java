@@ -35,15 +35,15 @@ public class MulticastSocketServer
         this.messageHandler.setServer(this);
 
         this.socket = new MulticastSocket(this.port);
-        InetSocketAddress address = new InetSocketAddress(this.address, this.port);
+        InetSocketAddress inetSocketAddress = new InetSocketAddress(this.address, this.port);
         ArrayList<NetworkInterface> interfaces = Collections
                 .list(NetworkInterface.getNetworkInterfaces());
         for (NetworkInterface nets  : interfaces)
         {
             System.out.println(nets.getDisplayName());
         }
-
-        this.socket.joinGroup(address, NetworkInterface.getByName("eth1"));
+        logger.info(inetSocketAddress.getAddress().toString());
+        this.socket.joinGroup(inetSocketAddress, null);
     }
 
     /**
