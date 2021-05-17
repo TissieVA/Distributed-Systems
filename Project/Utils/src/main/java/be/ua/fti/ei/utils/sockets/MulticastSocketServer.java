@@ -67,6 +67,7 @@ public class MulticastSocketServer
             try
             {
                 this.socket.receive(packet);
+                logger.info("Receiving");
             }
             catch(Exception ex)
             {
