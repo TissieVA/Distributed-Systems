@@ -9,8 +9,13 @@ import java.util.*;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Database
 {
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
+
     private HashMap<Integer, Node> hostDatabase;
     private HashMap<Integer,Integer> localFileDatabase;
 
@@ -57,12 +62,12 @@ public class Database
         }
 
         this.hostDatabase.put(hash, new Node(hostname, ipAddress, mcPort, filePort));
+        this.hostDatabase.get(hash).addFiles(files);
 
-        System.out.println("hostname: " + hostname + "=" + hash);
+        logger.info("Node " + hostname + " with hash=" + hash + " and ip=" + ipAddress + " has been added.");
 
         files.forEach(x -> {
             localFileDatabase.put(Hasher.getHash(x),hash);
-            System.out.println(x + "=" + Hasher.getHash(x));
         });
 
         outputXML();

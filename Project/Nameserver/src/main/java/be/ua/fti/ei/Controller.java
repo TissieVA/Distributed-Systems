@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @RestController
 public class Controller
@@ -53,4 +55,27 @@ public class Controller
 
         return Database.getInstance().removeNode(nodeName); // remove the node (works)
     }
+
+    @GetMapping("/nodes")
+    ArrayList<String> getAllNodes()
+    {
+        return (ArrayList<String>) Database.getInstance().getHostDatabase().values().stream().map(Node::getName)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/files")
+    ArrayList<String> getAllFiles()
+    {
+        return (ArrayList<String>) Database.getInstance().getHostDatabase().values().stream()
+                .flatMap(n -> n.getFiles().stream()).collect(Collectors.toList());
+    }
+
+    @GetMapping("/files/{node}")
+    ArrayList<String> getFilesInNode(@PathVariable String node)
+    {
+        int hash = Hasher.getHash(node);
+
+        return Database.getInstance().getHostDatabase().get(hash).getFiles();
+    }
+
 }
