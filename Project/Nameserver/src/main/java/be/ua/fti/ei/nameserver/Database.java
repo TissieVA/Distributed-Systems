@@ -35,6 +35,7 @@ public class Database
         this.localFileDatabase.values().stream().map(FileBody::getFilename).forEach(file -> {
             int replicateHost = this.getReplicateId(Hasher.getHash(file));
             FileBody fb = new FileBody(file, this.hostDatabase.get(replicateHost).getBody());
+            // TODO: should the filebody contain the node of the original file
 
             this.replicateDatabase.put(fb.getHash(), fb);
         });
