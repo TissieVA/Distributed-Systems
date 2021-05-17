@@ -181,6 +181,7 @@ class ParseThread extends Thread
         this.body = body;
         this.received = received;
         this.port = port;
+        this.ip = ip;
     }
 
     public void run()
