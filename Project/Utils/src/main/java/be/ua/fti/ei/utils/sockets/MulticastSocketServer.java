@@ -63,6 +63,7 @@ public class MulticastSocketServer
         logger.info("Listening");
         while(this.running)
         {
+            logger.info("Started Listening loop");
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try
             {
@@ -82,6 +83,8 @@ public class MulticastSocketServer
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
             logger.info("Received message type: " + body.getType());
             this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+
+            logger.info("Ended Listening loop");
         }
 
         this.socket.close();
