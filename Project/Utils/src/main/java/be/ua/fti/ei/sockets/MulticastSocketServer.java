@@ -67,13 +67,15 @@ public class MulticastSocketServer
 
         this.messageHandler.onServerStart();
 
+        logger.info("Listening");
         while(this.running)
         {
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
-
+            logger.info("dataPacket: "+ packet);
             try
             {
                 this.socket.receive(packet);
+                logger.info("package received");
             }
             catch(Exception ex)
             {

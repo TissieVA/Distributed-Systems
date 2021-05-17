@@ -60,6 +60,7 @@ public class Node
         }
 
         // Start the multicast socket
+        logger.info("Start Thread");
         Node.multicastSocket.getStartThread().start();
         // Search NameServer
         //Node.socket.findNS();
