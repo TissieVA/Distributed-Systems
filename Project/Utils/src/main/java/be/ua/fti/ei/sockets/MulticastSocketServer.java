@@ -36,13 +36,6 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
         InetSocketAddress inetSocketAddress = new InetSocketAddress(this.address, this.port);
-        ArrayList<NetworkInterface> interfaces = Collections
-                .list(NetworkInterface.getNetworkInterfaces());
-        for (NetworkInterface nets  : interfaces)
-        {
-            System.out.println(nets.getDisplayName());
-        }
-        logger.info(inetSocketAddress.getAddress().toString());
         this.socket.joinGroup(inetSocketAddress, NetworkInterface.getByName("ethwe0"));
     }
 
@@ -71,11 +64,9 @@ public class MulticastSocketServer
         while(this.running)
         {
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            logger.info("dataPacket: "+ packet);
             try
             {
                 this.socket.receive(packet);
-                logger.info("package received");
             }
             catch(Exception ex)
             {
@@ -106,7 +97,7 @@ public class MulticastSocketServer
 
         try
         {
-            logger.info(packet.getAddress().toString());
+            logger.info("Unicast send");
             this.socket.send(packet);
         }
         catch (Exception ex)

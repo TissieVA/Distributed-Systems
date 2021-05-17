@@ -30,7 +30,7 @@ public class FileHandler
             FileWriter myWriter = new FileWriter(filename);
             myWriter.write(body);
             myWriter.close();
-            //System.out.println("Successfully wrote to the file.");
+            logger.info("Successfully wrote to the file.");
             return true;
         }
         catch (IOException e)

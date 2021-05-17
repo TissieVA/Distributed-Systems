@@ -33,7 +33,7 @@ public class ClientMessageHandler implements MessageHandler
     {
         if(sb.getType().equals("ns"))
         {
-            logger.info("ns message received");
+            logger.info("Nameserver message received");
 
             NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
             String NameServerAddress = "http://" + ip + ":" + nsrb.getPort();
@@ -64,7 +64,7 @@ public class ClientMessageHandler implements MessageHandler
 
     public void sendAddNodeRestRequest() throws JsonProcessingException
     {
-        logger.info("sen publish request");
+        logger.info("send publish request");
         PublishBody pb = new PublishBody(Node.getClient().getName(), Node.getClient().getFiles(),
                 Node.getClient().getIpaddress(), Node.getClient().getMulticastPort(),
                 Node.getClient().getFileTransferPort());
