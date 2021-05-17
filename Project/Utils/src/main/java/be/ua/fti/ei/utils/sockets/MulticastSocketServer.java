@@ -97,7 +97,7 @@ public class MulticastSocketServer
 
         try
         {
-            logger.info("Unicast send");
+            logger.info("Multicast sent");
             this.socket.send(packet);
         }
         catch (Exception ex)
@@ -107,7 +107,7 @@ public class MulticastSocketServer
     }
 
     /**
-     * Send a multicast message
+     * Send a unicast message
      */
     public void sendUnicastMessage(String msg, String ipaddress, int port)
     {
@@ -115,6 +115,7 @@ public class MulticastSocketServer
 
         try
         {
+            logger.info("Unicast sent");
             DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(ipaddress), port);
             this.socket.send(packet);
         }
