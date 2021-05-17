@@ -1,6 +1,9 @@
 package be.ua.fti.ei;
 
 import be.ua.fti.ei.http.HttpRequester;
+import be.ua.fti.ei.http.PublishBody;
+import be.ua.fti.ei.sockets.NextPreviousBody;
+import com.google.gson.Gson;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +18,7 @@ import java.awt.event.ActionListener;
 //showing the configuration data of the selected node (i.e., previous and next ID)
 public class Graphics
 {
-
+    private static final Gson gson = new Gson();
 
     public static void main(String args[])
     {
@@ -60,15 +63,24 @@ public class Graphics
         JLabel labelIp = new JLabel("Give the IP of the node:");
         JTextField tfIP = new JTextField(16);
 
+        JLabel labelport = new JLabel("Give the multicastport of the node:");
+        JTextField tfport = new JTextField(16);
+
+        JLabel labelportunicast = new JLabel("Give the unicastport of the node:");
+        JTextField unitf = new JTextField(16);
+
         JButton send = new JButton("Send");
         send.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+
                 //do something if the send button is clicked
                 String textfieldName = tfName.getText();
                 String textfieldIP = tfIP.getText();
+                int tfPort = Integer.parseInt(tfport.getText());
+                int tfunicastPort =Integer.parseInt(unitf.getText());
 
                 if(textfieldName.length()<2|| textfieldIP.length()<10)
                 {
@@ -76,7 +88,10 @@ public class Graphics
                 }
                 else
                 {
-                    HttpRequester.POST("localhost:8080/publish","\"ipAddress\":"+"\"hostname\""+":"+"\""+textfieldName+"\""+"\""+textfieldIP+"\"");//do there have to be quotation marks around the ip??
+                    PublishBody publishBody = new PublishBody(textfieldName,null,textfieldIP,tfPort,tfunicastPort);
+                    String json = gson.toJson(publishBody);
+                    HttpRequester.POST(  "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
+
                 }
             }
         });
@@ -86,6 +101,10 @@ public class Graphics
         panelSend.add(send);
         panelIp.add(labelIp);
         panelIp.add(tfIP);
+        panelIp.add(labelport);
+        panelIp.add(tfport);
+        panelIp.add(labelportunicast);
+        panelIp.add(unitf);
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.NORTH, panelName);
