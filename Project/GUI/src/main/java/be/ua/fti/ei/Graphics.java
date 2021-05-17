@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+
 //This class will implement a graphical interface where we can add new nodes,removing nodes HTTPrequester
 //showing the list of all nodes
 //showing the list of all files on the selected node (local and replicated in two groups)
@@ -65,9 +67,13 @@ public class Graphics
                 String textfieldName = tfName.getText();
                 String textfieldIP = tfIP.getText();
 
-                if(textfieldName.equals(null)|| textfieldIP.equals(null))
+                if(textfieldName.length()<2|| textfieldIP.length()<10)
                 {
                     System.out.println("no values where added");
+                }
+                else
+                {
+                    
                 }
             }
         });
