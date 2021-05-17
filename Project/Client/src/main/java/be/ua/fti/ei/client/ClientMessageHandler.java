@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler
 {
@@ -102,8 +101,9 @@ public class ClientMessageHandler implements MessageHandler
         NextPreviousBody np = (NextPreviousBody) HttpRequester.
                 POST(Node.getClient().getNameServerAddress() + "/publish", json, NextPreviousBody.class);
 
-        Node.getClient().setNextId(np.getNext());
-        Node.getClient().setPreviousId(np.getPrevious());
+        logger.info("Http responds received");
+        Node.getClient().setNextId(np.getNextId());
+        Node.getClient().setPreviousId(np.getPreviousId());
     }
 
     public NodeBody sendFindFile(String filename)

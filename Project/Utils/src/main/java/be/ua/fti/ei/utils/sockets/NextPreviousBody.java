@@ -5,28 +5,28 @@ import be.ua.fti.ei.utils.http.PublishBody;
 
 public class NextPreviousBody extends PublishBody implements java.io.Serializable {
 
-    private int previous,next;
+    private int previousId, nextId;
 
     public NextPreviousBody(int previous, int next) {
-        this.previous = previous;
-        this.next = next;
+        this.previousId = previous;
+        this.nextId = next;
     }
 
     public NextPreviousBody() { }
 
-    public int getPrevious() {
-        return previous;
+    public int getPreviousId() {
+        return previousId;
     }
 
-    public void setPrevious(int previous) {
-        this.previous = previous;
+    public void setPreviousId(int previous) {
+        this.previousId = previous;
     }
 
-    public int getNext() {
-        return next;
+    public int getNextId() {
+        return nextId;
     }
 
-    public void setNext(int next) {
-        this.next = next;
+    public void setNextId(int nextId) {
+        this.nextId = nextId;
     }
 }

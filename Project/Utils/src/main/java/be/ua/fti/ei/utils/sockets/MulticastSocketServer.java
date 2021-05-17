@@ -82,7 +82,8 @@ public class MulticastSocketServer
             String received = new String(packet.getData(), 0, packet.getLength());
             SocketBody body = this.gson.fromJson(received, SocketBody.class);
             logger.info("Received message type: " + body.getType());
-            this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+            //this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+            new ParseThread(body, received, ip.getHostAddress(), port, this.messageHandler).start();
 
             logger.info("Ended Listening loop");
         }
@@ -163,5 +164,27 @@ class StartSocketThread extends Thread
     public void run()
     {
         this.socket.startServer();
+    }
+}
+
+class ParseThread extends Thread
+{
+    MessageHandler mh;
+    SocketBody body;
+    String received;
+    String ip;
+    int port;
+
+    public ParseThread(SocketBody body, String received, String ip, int port, MessageHandler mh)
+    {
+        this.mh = mh;
+        this.body = body;
+        this.received = received;
+        this.port = port;
+    }
+
+    public void run()
+    {
+        this.mh.parse(body, received, ip, port);
     }
 }
