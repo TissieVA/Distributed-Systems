@@ -1,5 +1,7 @@
 package be.ua.fti.ei;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import be.ua.fti.ei.sockets.MulticastSocketServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Server
 {
     private static MulticastSocketServer multicastSocket;
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public static void main(String[] args)
     {
@@ -22,6 +25,9 @@ public class Server
         {
             e.printStackTrace();
         }
+
+        logger.info("Start Thread");
+        Server.multicastSocket.getStartThread().start();
     }
 
     public static MulticastSocketServer getMulticastSocket()

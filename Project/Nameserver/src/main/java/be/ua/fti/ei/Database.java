@@ -8,11 +8,14 @@ import java.io.*;
 import java.util.*;
 import java.util.Iterator;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Database
 {
     private HashMap<Integer, Node> hostDatabase;
     private HashMap<Integer,Integer> localFileDatabase;
+    private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
 
     public Database()
@@ -45,6 +48,7 @@ public class Database
 
     public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress, int mcPort, int filePort)
     {
+        logger.info("Adding new node");
 
         if (this.hostDatabase.values().stream().anyMatch(x -> x.getIpaddress().equals(ipAddress)))
             return false;
