@@ -1,5 +1,7 @@
 package be.ua.fti.ei;
 
+import be.ua.fti.ei.http.HttpRequester;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,9 +15,10 @@ import java.awt.event.ActionListener;
 //showing the configuration data of the selected node (i.e., previous and next ID)
 public class Graphics
 {
+
+
     public static void main(String args[])
     {
-
         JFrame frame = new JFrame("Distributed Systems");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500,500);
@@ -73,7 +76,7 @@ public class Graphics
                 }
                 else
                 {
-                    
+                    HttpRequester.POST("localhost:8080/publish","\"ipAddress\":"+textfieldIP);//do there have to be quotation marks around the ip??
                 }
             }
         });

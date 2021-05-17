@@ -1,4 +1,4 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.http;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;
