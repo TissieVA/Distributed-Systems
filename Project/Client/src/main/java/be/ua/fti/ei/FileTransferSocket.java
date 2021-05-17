@@ -82,6 +82,7 @@ public class FileTransferSocket
             catch(Exception ex)
             {
                 logger.error(ex.getMessage());
+                break;
             }
         }
 
