@@ -87,6 +87,7 @@ public class MulticastSocketServer
             logger.info("Ended Listening loop");
         }
 
+        logger.info("Socket Closed");
         this.socket.close();
     }
 
