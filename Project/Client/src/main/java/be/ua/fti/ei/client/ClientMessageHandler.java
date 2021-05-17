@@ -27,7 +27,7 @@ public class ClientMessageHandler implements MessageHandler
     public void onServerStart()
     {
         logger.info("sendFindNS");
-        sendFindNS();
+        sendFindNS(6667);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ClientMessageHandler implements MessageHandler
         }
     }
 
-    public void sendFindNS()
+    public void sendFindNS(int port)
     {
         gson = new Gson();
 
@@ -84,7 +84,7 @@ public class ClientMessageHandler implements MessageHandler
         String msg = gson.toJson(sb);
         logger.info("send where is ns message");
         logger.info(msg);
-        this.mss.sendMessage(msg);
+        this.mss.sendMessage(msg, port);
     }
 
 

@@ -80,7 +80,11 @@ public class NSmessageHandler implements MessageHandler
         logger.info("Sending update message");
         SocketBody sb = new SocketBody("update");
         String msg = gson.toJson(sb);
-        this.mss.sendMessage(msg);
+
+        // Send the message to every unique port that can be found in the nodes DB
+        Database.getInstance().getHostDatabase().values().stream().map(Node::getMcPort).distinct().forEach(port ->
+                this.mss.sendMessage(msg, port));
+
     }
 
     private static NSmessageHandler instance;

@@ -95,11 +95,11 @@ public class MulticastSocketServer
     /**
      * Send a multicast message
      */
-    public void sendMessage(String msg)
+    public void sendMessage(String msg, int port)
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, 6667);
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, port);
 
         try
         {
@@ -130,8 +130,6 @@ public class MulticastSocketServer
             logger.error(ex.getMessage());
         }
     }
-
-
 
     /**
      * Stop the socket server
