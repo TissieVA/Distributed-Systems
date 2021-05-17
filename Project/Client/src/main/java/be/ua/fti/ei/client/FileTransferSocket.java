@@ -1,4 +1,4 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

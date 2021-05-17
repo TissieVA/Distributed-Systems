@@ -1,4 +1,4 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
 
 import java.io.*;
 

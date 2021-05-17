@@ -1,12 +1,16 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
 
-import be.ua.fti.ei.http.PublishBody;
-import be.ua.fti.ei.sockets.NextPreviousBody;
+import be.ua.fti.ei.utils.Hasher;
+import be.ua.fti.ei.utils.http.FileBody;
+import be.ua.fti.ei.utils.http.NodeBody;
+import be.ua.fti.ei.utils.http.PublishBody;
+import be.ua.fti.ei.utils.sockets.NextPreviousBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class Controller
@@ -14,12 +18,12 @@ public class Controller
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     @GetMapping("/find/{filename}")
-    Node getFile(@PathVariable String filename, HttpServletRequest request)
+    NodeBody getFile(@PathVariable String filename, HttpServletRequest request)
     {
-
         logger.info("Find file request received");
 
-        return Database.getInstance().searchFile(filename);
+        Node n = Database.getInstance().searchFile(filename);
+        return new NodeBody(n.getName(),n.getIpaddress(), n.getFilePort());
     }
 
     @GetMapping("/find/ipaddress/{filename}")
@@ -39,6 +43,7 @@ public class Controller
 
             return null;
 
+
         return Database.getInstance().getNeighbours(body.getHostname());
     }
 
@@ -52,5 +57,11 @@ public class Controller
         NSmessageHandler.getInstance().updateNeighboursAfterDeletion(hash);
 
         return Database.getInstance().removeNode(nodeName); // remove the node (works)
+    }
+
+    @GetMapping("/replicates/{nodeName}")
+    List<FileBody> getReplicates(@PathVariable String nodeName)
+    {
+        return Database.getInstance().getReplicates(Hasher.getHash(nodeName));
     }
 }

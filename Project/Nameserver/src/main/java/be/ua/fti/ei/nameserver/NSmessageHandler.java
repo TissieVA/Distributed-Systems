@@ -1,7 +1,7 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
 
-import be.ua.fti.ei.sockets.MulticastSocketServer;
-import be.ua.fti.ei.sockets.*;
+import be.ua.fti.ei.utils.sockets.MulticastSocketServer;
+import be.ua.fti.ei.utils.sockets.*;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 public class NSmessageHandler implements MessageHandler
 {
-    private static final Logger logger = LoggerFactory.getLogger(be.ua.fti.ei.sockets.MulticastSocketServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(be.ua.fti.ei.utils.sockets.MulticastSocketServer.class);
     private static Gson gson;
-    private be.ua.fti.ei.sockets.MulticastSocketServer mss;
+    private be.ua.fti.ei.utils.sockets.MulticastSocketServer mss;
 
     @Override
     public void setServer(MulticastSocketServer mss)
@@ -73,6 +73,14 @@ public class NSmessageHandler implements MessageHandler
 
         this.mss.sendUnicastMessage(msg, prev.getIpaddress(), prev.getMcPort());
 
+    }
+
+    public void update()
+    {
+        logger.info("Sending update message");
+        SocketBody sb = new SocketBody("update");
+        String msg = gson.toJson(sb);
+        this.mss.sendMessage(msg);
     }
 
     private static NSmessageHandler instance;

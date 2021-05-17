@@ -1,8 +1,8 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import be.ua.fti.ei.sockets.MulticastSocketServer;
+import be.ua.fti.ei.utils.sockets.MulticastSocketServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
