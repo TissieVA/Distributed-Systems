@@ -16,12 +16,16 @@ import java.awt.event.ActionListener;
 //showing the list of all nodes
 //showing the list of all files on the selected node (local and replicated in two groups)
 //showing the configuration data of the selected node (i.e., previous and next ID)
+
 public class Graphics
 {
     private static final Gson gson = new Gson();
 
-    public static void main(String args[])
+    public static void main(String args[]) throws Exception
     {
+        NSConfig nsConfig = new NSConfig();
+        NSConfig.load("config.json");
+
         JFrame frame = new JFrame("Distributed Systems");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500,500);
@@ -36,7 +40,7 @@ public class Graphics
             @Override
             public void actionPerformed(ActionEvent e) {
                 panelMenu.removeAll();
-                addNewNode(frame);
+                addNewNode(frame,nsConfig);
             }
         });
 
@@ -50,7 +54,7 @@ public class Graphics
 
     }
 
-    private static void addNewNode(JFrame frame)
+    private static void addNewNode(JFrame frame,NSConfig nsConfig)
     {
 
         JPanel panelName = new JPanel(); // the panel is not visible in output
@@ -90,8 +94,7 @@ public class Graphics
                 {
                     PublishBody publishBody = new PublishBody(textfieldName,null,textfieldIP,tfPort,tfunicastPort);
                     String json = gson.toJson(publishBody);
-                    HttpRequester.POST(  "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
-
+                    HttpRequester.POST( nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
                 }
             }
         });

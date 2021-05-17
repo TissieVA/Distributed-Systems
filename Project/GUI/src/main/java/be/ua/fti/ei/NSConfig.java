@@ -6,10 +6,28 @@ import java.nio.file.Path;
 public class NSConfig implements java.io.Serializable
 {
     private String ifName;
+    private String ipAddress;
     private int fileTransferPort;
     private int multicastPort;
+    private int httpPort;
 
     public NSConfig() {}
+
+    public int getHttpPort() {
+        return httpPort;
+    }
+
+    public void setHttpPort(int httpPort) {
+        this.httpPort = httpPort;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
     public String getIfName() {
         return ifName;
