@@ -76,7 +76,7 @@ public class Graphics
                 }
                 else
                 {
-                    HttpRequester.POST("localhost:8080/publish","\"ipAddress\":"+textfieldIP);//do there have to be quotation marks around the ip??
+                    HttpRequester.POST("localhost:8080/publish","\"ipAddress\":"+"\"hostname\""+":"+"\""+textfieldName+"\""+"\""+textfieldIP+"\"");//do there have to be quotation marks around the ip??
                 }
             }
         });
