@@ -15,7 +15,6 @@ public class ClientMessageHandler implements MessageHandler
     private static Gson gson;
     private MulticastSocketServer mss;
 
-
     @Override
     public void setServer(MulticastSocketServer mss)
     {
