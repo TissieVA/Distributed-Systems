@@ -1,8 +1,7 @@
 package be.ua.fti.ei.http;
 
 import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -11,7 +10,7 @@ import java.net.http.HttpResponse;
 
 public class HttpRequester
 {
-    private static final Logger logger = LoggerFactory.getLogger(HttpRequester.class);
+
 
     private static final Gson gson = new Gson();
 
@@ -41,7 +40,7 @@ public class HttpRequester
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage());
+            System.out.println("Error in POST");
         }
     }
 
@@ -78,7 +77,7 @@ public class HttpRequester
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage());
+            System.out.println("Error in POST");
         }
 
         return null;
@@ -100,7 +99,7 @@ public class HttpRequester
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage());
+            System.out.println("Error in GET");
         }
     }
 
@@ -128,7 +127,7 @@ public class HttpRequester
         }
         catch (Exception e)
         {
-            logger.error(e.getMessage());
+            System.out.println("Error in GET");
         }
 
         return null;

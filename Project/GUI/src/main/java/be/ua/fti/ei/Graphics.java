@@ -24,7 +24,6 @@ public class Graphics
     public static void main(String args[]) throws Exception
     {
         NSConfig nsConfig = NSConfig.load("config.json");
-        System.out.println("the port is:"+nsConfig.getHttpPort());
         JFrame frame = new JFrame("Distributed Systems");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500,500);
@@ -94,7 +93,7 @@ public class Graphics
                     PublishBody publishBody = new PublishBody(textfieldName,null,textfieldIP,tfPort,tfunicastPort);
                     String json = gson.toJson(publishBody);
                     System.out.println("what we are sending to the post:"+nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/publish");
-                    HttpRequester.POST( nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
+                    HttpRequester.POST( "http://"+nsConfig.getIpAddress()+ ":" + nsConfig.getHttpPort() + "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
                 }
             }
         });
