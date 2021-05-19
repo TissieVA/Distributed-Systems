@@ -64,7 +64,7 @@ public class ClientMessageHandler implements MessageHandler
 
     public void sendAddNodeRestRequest() throws JsonProcessingException
     {
-        logger.info("sen publish request");
+        logger.info("send publish request");
         PublishBody pb = new PublishBody(Node.getClient().getName(), Node.getClient().getFiles(),
                 Node.getClient().getIpaddress(), Node.getClient().getMulticastPort(),
                 Node.getClient().getFileTransferPort());

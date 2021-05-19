@@ -43,7 +43,7 @@ public class MulticastSocketServer
             System.out.println(nets.getDisplayName());
         }
 
-        this.socket.joinGroup(address, NetworkInterface.getByName("eth1"));
+        this.socket.joinGroup(address, NetworkInterface.getByName("Ethernet 2"));
     }
 
     /**

@@ -3,13 +3,17 @@ package be.ua.fti.ei;
 import be.ua.fti.ei.http.HttpRequester;
 import be.ua.fti.ei.http.PublishBody;
 import be.ua.fti.ei.sockets.NextPreviousBody;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
+import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 
 //This class will implement a graphical interface where we can add new nodes,removing nodes HTTPrequester
@@ -90,10 +94,13 @@ public class Graphics
                 }
                 else
                 {
-                    PublishBody publishBody = new PublishBody(textfieldName,null,textfieldIP,tfPort,tfunicastPort);
+                    ArrayList<String> files=new ArrayList<String>();
+                    PublishBody publishBody = new PublishBody(textfieldName,files,textfieldIP,tfPort,tfunicastPort);
                     String json = gson.toJson(publishBody);
                     System.out.println("what we are sending to the post:"+nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/publish");
-                    HttpRequester.POST( "http://"+nsConfig.getIpAddress()+ ":" + nsConfig.getHttpPort() + "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
+                    HttpRequester.
+                    POST( "http://"+nsConfig.getIpAddress()+ ":" + nsConfig.getHttpPort() + "/publish", json,NextPreviousBody.class);//need to add the ip of the nameserver and port
+
                 }
             }
         });
