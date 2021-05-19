@@ -62,6 +62,6 @@ public class Controller
     @GetMapping("/replicates/{nodeName}")
     List<FileBody> getReplicates(@PathVariable String nodeName)
     {
-        return Database.getInstance().getReplicates(Hasher.getHash(nodeName));
+        return Database.getInstance().getReplicatesOfNode(Hasher.getHash(nodeName));
     }
 }

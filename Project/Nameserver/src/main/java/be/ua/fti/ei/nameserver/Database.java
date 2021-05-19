@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 public class Database
 {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
@@ -34,10 +35,9 @@ public class Database
     {
         this.localFileDatabase.values().stream().map(FileBody::getFilename).forEach(file -> {
             int replicateHost = this.getReplicateId(Hasher.getHash(file));
-            //FileBody fb = new FileBody(file, this.hostDatabase.get(replicateHost).getBody());
-            // TODO: should the filebody contain the node of the original file maybe next line correct
-            this.replicateDatabase.put(replicateHost, this.localFileDatabase.get(Hasher.getHash(file)));
+            FileBody fb = new FileBody(file, this.hostDatabase.get(replicateHost).getBody());
 
+            this.replicateDatabase.put(replicateHost, fb);
         });
     }
 
@@ -81,9 +81,11 @@ public class Database
         return hostId != localHost ? hostId : sortedKeys.get(sortedKeys.size() - 2);
     }
 
-    public List<FileBody> getReplicates(int hash)
+    public List<FileBody> getReplicatesOfNode(int hash)
     {
-        return this.replicateDatabase.values().stream().filter(f -> f.getHash() == hash).collect(Collectors.toList());
+        return this.replicateDatabase.values().stream().filter(f -> f.getHostHash() == hash)
+                .map(f -> f.getFileHash()).map(h -> this.localFileDatabase.get(h))
+                .collect(Collectors.toList());
     }
 
     public Node searchFile(String filename)
@@ -93,7 +95,7 @@ public class Database
         if(!this.localFileDatabase.containsKey(hash))
             return null;
 
-        return this.hostDatabase.get(this.replicateDatabase.get(hash).getHash());
+        return this.hostDatabase.get(this.replicateDatabase.get(hash).getHostHash());
     }
 
     public boolean addNewNode(String hostname, ArrayList<String> files, String ipAddress, int mcPort, int filePort)

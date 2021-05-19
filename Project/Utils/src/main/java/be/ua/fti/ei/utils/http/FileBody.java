@@ -35,7 +35,12 @@ public class FileBody implements java.io.Serializable
         this.node = node;
     }
 
-    public int getHash()
+    public int getHostHash()
+    {
+        return Hasher.getHash(this.node);
+    }
+
+    public int getFileHash()
     {
         return Hasher.getHash(this.filename);
     }
