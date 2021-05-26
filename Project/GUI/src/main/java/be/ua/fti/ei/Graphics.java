@@ -3,15 +3,12 @@ package be.ua.fti.ei;
 import be.ua.fti.ei.http.HttpRequester;
 import be.ua.fti.ei.http.PublishBody;
 import be.ua.fti.ei.sockets.NextPreviousBody;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
-import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -23,6 +20,8 @@ import java.util.ArrayList;
 
 public class Graphics
 {
+    JLayeredPane layeredPane = new JLayeredPane();
+
     private static final Gson gson = new Gson();
 
     public static void main(String args[]) throws Exception
@@ -30,7 +29,7 @@ public class Graphics
         NSConfig nsConfig = NSConfig.load("config.json");
         JFrame frame = new JFrame("Distributed Systems");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500,500);
+        frame.setSize(600,600);
         JPanel panelMenu = new JPanel(); // the panel is not visible in output
 
 
@@ -94,13 +93,11 @@ public class Graphics
                 }
                 else
                 {
-                    ArrayList<String> files=new ArrayList<String>();
+                    ArrayList<String> files = new ArrayList<String >();
                     PublishBody publishBody = new PublishBody(textfieldName,files,textfieldIP,tfPort,tfunicastPort);
                     String json = gson.toJson(publishBody);
                     System.out.println("what we are sending to the post:"+nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/publish");
-                    HttpRequester.
-                    POST( "http://"+nsConfig.getIpAddress()+ ":" + nsConfig.getHttpPort() + "/publish", json,NextPreviousBody.class);//need to add the ip of the nameserver and port
-
+                    HttpRequester.POST( "http://"+nsConfig.getIpAddress()+ ":" + nsConfig.getHttpPort() + "/publish", json, NextPreviousBody.class);//need to add the ip of the nameserver and port
                 }
             }
         });
@@ -121,5 +118,8 @@ public class Graphics
         frame.getContentPane().add(BorderLayout.SOUTH,panelSend);
         frame.setVisible(true);
     }
+
+
+
 }
 
