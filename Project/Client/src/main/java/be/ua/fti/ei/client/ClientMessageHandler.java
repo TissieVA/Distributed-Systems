@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler
 {
@@ -32,7 +32,6 @@ public class ClientMessageHandler implements MessageHandler
     @Override
     public void parse(SocketBody sb, String msg, String ip, int port)
     {
-
         if(sb.getType().equals("ns"))
         {
             logger.info("Nameserver message received");
@@ -55,19 +54,26 @@ public class ClientMessageHandler implements MessageHandler
             String nameServerAddress = Node.getClient().getNameServerAddress() + "/replicates/" +
                     Node.getClient().getName();
 
-            ArrayList<FileBody> files = (ArrayList<FileBody>) HttpRequester.GET(nameServerAddress, ArrayList.class);
+            List<FileBody> files = HttpRequester.GETList(nameServerAddress, FileBody[].class);
+
+            files.forEach(f -> logger.info("Received files to replicate: " + f.getFilename()));
 
             if (files != null && !files.isEmpty())
             for (FileBody file : files)
             {
-                try
+                logger.info("ask for" + file.getFilename());
+                if (!file.getNode().getName().equals(Node.getClient().getName()))
                 {
-                    Node.getFileTransferSocket().downloadFile(file.getNode().getIpaddress(), file.getNode().getFilePort(),
-                            file.getFilename());
-                }
-                catch (Exception e)
-                {
-                    logger.error(e.getMessage());
+                    try
+                    {
+                        logger.info("Started downloading " + file.getFilename());
+                        Node.getFileTransferSocket().downloadFile(file.getNode().getIpaddress(), file.getNode().getFilePort(),
+                                file.getFilename());
+                        logger.info("Download done");
+                    } catch (Exception e)
+                    {
+                        logger.error(e.getMessage());
+                    }
                 }
             }
         }

@@ -33,11 +33,12 @@ public class Database
 
     public void buildReplicateDatabase()
     {
+        logger.info("Building replicates");
         this.localFileDatabase.values().stream().map(FileBody::getFilename).forEach(file -> {
             int replicateHost = this.getReplicateId(Hasher.getHash(file));
             FileBody fb = new FileBody(file, this.hostDatabase.get(replicateHost).getBody());
 
-            this.replicateDatabase.put(replicateHost, fb);
+            this.replicateDatabase.put(fb.getFileHash(), fb);
         });
     }
 
@@ -52,6 +53,8 @@ public class Database
         int localHost = Hasher.getHash(this.localFileDatabase.get(hash).getNode().getName());
 
         List<Integer> sortedKeys = hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
+
+
 
         for (int i = sortedKeys.size()-1; i >= 0 ; i--)
         {
@@ -78,11 +81,18 @@ public class Database
         }
 
         int hostId = sortedKeys.get(sortedKeys.size() - 1);
-        return hostId != localHost ? hostId : sortedKeys.get(sortedKeys.size() - 2);
+        return hostId != localHost || sortedKeys.size() == 1 ? hostId : sortedKeys.get(sortedKeys.size() - 2);
     }
 
     public List<FileBody> getReplicatesOfNode(int hash)
     {
+
+        List<FileBody> temp = this.replicateDatabase.values().stream().filter(f -> f.getHostHash() == hash)
+                .map(f -> f.getFileHash()).map(h -> this.localFileDatabase.get(h))
+                .collect(Collectors.toList());
+
+        temp.forEach(f -> logger.info(f.getFilename()+ " on "+ f.getNode().getName()));
+        logger.info("");
         return this.replicateDatabase.values().stream().filter(f -> f.getHostHash() == hash)
                 .map(f -> f.getFileHash()).map(h -> this.localFileDatabase.get(h))
                 .collect(Collectors.toList());

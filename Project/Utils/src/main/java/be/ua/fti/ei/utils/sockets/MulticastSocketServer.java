@@ -63,12 +63,10 @@ public class MulticastSocketServer
         logger.info("Listening");
         while(this.running)
         {
-            logger.info("Started Listening loop");
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try
             {
                 this.socket.receive(packet);
-                logger.info("Receiving");
             }
             catch(Exception ex)
             {
@@ -79,13 +77,19 @@ public class MulticastSocketServer
             InetAddress ip = packet.getAddress();
             int port = packet.getPort();
 
-            String received = new String(packet.getData(), 0, packet.getLength());
-            SocketBody body = this.gson.fromJson(received, SocketBody.class);
-            logger.info("Received message type: " + body.getType());
-            //this.messageHandler.parse(body, received, ip.getHostAddress(), port);
-            new ParseThread(body, received, ip.getHostAddress(), port, this.messageHandler).start();
+            try
+            {
+                String received = new String(packet.getData(), 0, packet.getLength());
+                SocketBody body = this.gson.fromJson(received, SocketBody.class);
+                logger.info("Received message type: " + body.getType());
+                //this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+                new ParseThread(body, received, ip.getHostAddress(), port, this.messageHandler).start();
 
-            logger.info("Ended Listening loop");
+            }
+            catch (Exception e)
+            {
+                //logger.error("Received malformed multicast message", e);
+            }
         }
 
         logger.info("Socket Closed");

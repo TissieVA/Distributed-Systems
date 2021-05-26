@@ -37,7 +37,7 @@ public class FileBody implements java.io.Serializable
 
     public int getHostHash()
     {
-        return Hasher.getHash(this.node);
+        return this.node.getHash();
     }
 
     public int getFileHash()
