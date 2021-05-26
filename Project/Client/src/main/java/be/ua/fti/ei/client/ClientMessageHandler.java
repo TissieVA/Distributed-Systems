@@ -1,13 +1,13 @@
 package be.ua.fti.ei.client;
 
-import be.ua.fti.ei.http.HttpRequester;
+import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.sockets.*;
 import be.ua.fti.ei.utils.http.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler

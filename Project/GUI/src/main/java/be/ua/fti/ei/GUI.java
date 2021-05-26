@@ -1,8 +1,8 @@
 package be.ua.fti.ei;
 
-import be.ua.fti.ei.http.HttpRequester;
-import be.ua.fti.ei.http.PublishBody;
-import be.ua.fti.ei.sockets.NextPreviousBody;
+import be.ua.fti.ei.utils.http.HttpRequester;
+import be.ua.fti.ei.utils.http.PublishBody;
+import be.ua.fti.ei.utils.sockets.NextPreviousBody;
 import com.google.gson.Gson;
 import org.w3c.dom.Node;
 
