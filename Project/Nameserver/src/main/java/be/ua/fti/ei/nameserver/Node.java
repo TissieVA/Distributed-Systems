@@ -1,4 +1,6 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
+
+import be.ua.fti.ei.utils.http.NodeBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +79,10 @@ public class Node implements java.io.Serializable
     public void setFiles(ArrayList<String> files)
     {
         this.files = files;
+    }
+
+    public NodeBody getBody()
+    {
+        return new NodeBody(this.name, this.ipaddress, this.filePort);
     }
 }

@@ -1,4 +1,4 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.client;
 
 import com.google.gson.Gson;
 

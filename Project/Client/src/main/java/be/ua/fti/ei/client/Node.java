@@ -1,7 +1,6 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.client;
 
-import be.ua.fti.ei.sockets.MulticastSocketServer;
-import org.apache.tomcat.jni.Directory;
+import be.ua.fti.ei.utils.sockets.MulticastSocketServer;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -29,6 +26,7 @@ public class Node
 
     private static MulticastSocketServer multicastSocket;
     private static FileTransferSocket fileSocket;
+    public static FileTransferSocket getFileTransferSocket() {return fileSocket; }
 
     public static void main(String[] args)
     {
@@ -45,6 +43,7 @@ public class Node
             ArrayList<String> files = (ArrayList<String>) Arrays.stream(dir.list()).collect(Collectors.toList());
             Node.client.setFiles(files);
 
+            ClientMessageHandler cmh = new ClientMessageHandler();
             // In IPv4: any address from 224.0.0.0 -> 239.255.255.255 can be used as a multicast address
             // Meaning anyone who joins the same multicast ip-group can receive these messages
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", Node.client.getMulticastPort(),
@@ -60,12 +59,14 @@ public class Node
         }
 
         // Start the multicast socket
+
         Node.multicastSocket.getStartThread().start();
         // Search NameServer
         //Node.socket.findNS();
 
         // Start the file socket
         Node.fileSocket.getStartThread().start();
+
 
         logger.info(Node.client.getName() + " started successfully!");
     }
