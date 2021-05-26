@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -57,9 +58,9 @@ public class Controller
     }
 
     @GetMapping("/nodes")
-    ArrayList<String> getAllNodes()
+    List<String> getAllNodes()
     {
-        return (ArrayList<String>) Database.getInstance().getHostDatabase().values().stream().map(Node::getName)
+        return  Database.getInstance().getHostDatabase().values().stream().map(Node::getName)
                 .collect(Collectors.toList());
     }
 

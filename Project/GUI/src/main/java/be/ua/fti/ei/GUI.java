@@ -4,6 +4,7 @@ import be.ua.fti.ei.http.HttpRequester;
 import be.ua.fti.ei.http.PublishBody;
 import be.ua.fti.ei.sockets.NextPreviousBody;
 import com.google.gson.Gson;
+import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,8 @@ public class GUI extends JFrame{
     private JButton sendButtonRemove;
     private JTextField tfNodeNameRemove;
     private JLabel textNameNodeRemove;
+    private JPanel AllNodesPanel;
+    private JButton GiveAllNodes;
     private static final Gson gson = new Gson();
 
 
@@ -69,6 +72,23 @@ public class GUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                String textfieldNameToRemove = tfNodeNameRemove.getText();
+                if(textfieldNameToRemove.length()<2)
+                {
+                    System.out.println("Name to short");
+                }
+                else
+                {
+                    System.out.println("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/remove");
+                    HttpRequester.GET("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/remove/"+ textfieldNameToRemove);//
+                }
+            }
+
+        });
+        GiveAllNodes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/nodes",String[].class));
 
             }
         });
