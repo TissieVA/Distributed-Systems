@@ -41,6 +41,13 @@ public class GUI extends JFrame{
     private JLabel ReplicatedFilesText;
     private JLabel FilesListText;
     private JLabel ReplicatedFilesList;
+    private JPanel ConfigData;
+    private JTextField tfNameNodeConfig;
+    private JButton ConfigButton;
+    private JLabel NextNodeText;
+    private JLabel previousNodetext;
+    private JLabel tfNextNodeLIST;
+    private JLabel previousNodeLIST;
     private static final Gson gson = new Gson();
 
 
@@ -122,6 +129,16 @@ public class GUI extends JFrame{
                 }
                 String str = stringBuilder.toString();
                 FilesListText.setText(str);
+            }
+        });
+        ConfigButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String textfieldname = tfNameNodeConfig.getText();
+                List<String> fileList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/nextprevious/"+textfieldname,String[].class);
+                tfNextNodeLIST.setText(fileList.get(0));
+                previousNodeLIST.setText(fileList.get(1));
+
             }
         });
     }

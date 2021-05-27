@@ -78,6 +78,25 @@ public class Controller
                 .flatMap(n -> n.getFiles().stream()).collect(Collectors.toList());
     }
 
+    @GetMapping("/nextprevious/{node}")
+    ArrayList<String> getNextPrevious(@PathVariable String node)
+    {
+        int hash = Hasher.getHash(node);
+        int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
+        System.out.println("higherneighbour hash"+ higherNeighbour);
+        int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+        String higher = Database.getInstance().getHostDatabase().get(higherNeighbour).getName();
+        String lower = Database.getInstance().getHostDatabase().get(lowerNeighbour).getName();
+        System.out.println("Higher neighbour"+Database.getInstance().getHostDatabase().get(higherNeighbour).getName());
+
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add(higher);
+        ret.add(lower);
+        return ret;
+    }
+
+
+
     @GetMapping("/files/{node}")
     List<String> getFilesInNode(@PathVariable String node)
     {
