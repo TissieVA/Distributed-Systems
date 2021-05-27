@@ -4,12 +4,14 @@ import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.http.PublishBody;
 import be.ua.fti.ei.utils.sockets.NextPreviousBody;
 import com.google.gson.Gson;
-import org.w3c.dom.Node;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GUI extends JFrame{
     private JTabbedPane removeFrame;
@@ -32,6 +34,13 @@ public class GUI extends JFrame{
     private JLabel textNameNodeRemove;
     private JPanel AllNodesPanel;
     private JButton GiveAllNodes;
+    private JLabel textAllNodes;
+    private JTextField tfNameOfNode;
+    private JButton ButtonFilesOnNode;
+    private JLabel FilesText;
+    private JLabel ReplicatedFilesText;
+    private JLabel FilesListText;
+    private JLabel ReplicatedFilesList;
     private static final Gson gson = new Gson();
 
 
@@ -88,8 +97,31 @@ public class GUI extends JFrame{
         GiveAllNodes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/nodes",String[].class));
+                List<String> nodeList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/nodes",String[].class);
+                StringBuilder stringBuilder = new StringBuilder();
+                for(String str : nodeList)
+                {
+                    stringBuilder.append(str);
+                    stringBuilder.append(" ,  ");
+                }
+                String str = stringBuilder.toString();
+                textAllNodes.setText(str);
+            }
+        });
 
+        ButtonFilesOnNode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String textfieldname = tfNameOfNode.getText();
+                List<String> fileList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/files/"+textfieldname,String[].class);
+                StringBuilder stringBuilder = new StringBuilder();
+                for(String str : fileList)
+                {
+                    stringBuilder.append(str);
+                    stringBuilder.append(" ,  ");
+                }
+                String str = stringBuilder.toString();
+                FilesListText.setText(str);
             }
         });
     }

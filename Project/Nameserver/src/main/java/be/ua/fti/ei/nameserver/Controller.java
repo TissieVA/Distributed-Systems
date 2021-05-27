@@ -68,6 +68,7 @@ public class Controller
     {
         return  Database.getInstance().getHostDatabase().values().stream().map(Node::getName)
                 .collect(Collectors.toList());
+
     }
 
     @GetMapping("/files")
@@ -78,10 +79,9 @@ public class Controller
     }
 
     @GetMapping("/files/{node}")
-    ArrayList<String> getFilesInNode(@PathVariable String node)
+    List<String> getFilesInNode(@PathVariable String node)
     {
         int hash = Hasher.getHash(node);
-
         return Database.getInstance().getHostDatabase().get(hash).getFiles();
     }
 
