@@ -23,7 +23,7 @@ public class Controller
         logger.info("Find file request received");
 
         Node n = Database.getInstance().searchFile(filename);
-        return new NodeBody(n.getName(),n.getIpaddress(), n.getFilePort());
+        return new NodeBody(n.getName(),n.getIpaddress(), n.getFilePort(), n.getMcPort());
     }
 
     @GetMapping("/find/ipaddress/{filename}")

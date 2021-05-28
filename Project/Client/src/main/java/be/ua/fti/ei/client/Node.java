@@ -27,6 +27,9 @@ public class Node
     private static MulticastSocketServer multicastSocket;
     private static FileTransferSocket fileSocket;
     public static FileTransferSocket getFileTransferSocket() {return fileSocket; }
+    //private static FileClient fileClient;
+    private static FileServer fileServer;
+    public static FileServer getFileServer() {return fileServer;}
 
     public static void main(String[] args)
     {
@@ -48,7 +51,10 @@ public class Node
             // Meaning anyone who joins the same multicast ip-group can receive these messages
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", Node.client.getMulticastPort(),
                     new ClientMessageHandler());
-            Node.fileSocket = new FileTransferSocket(Node.client.getFileTransferPort());
+            //Node.fileSocket = new FileTransferSocket(Node.client.getFileTransferPort());
+            Node.fileServer = new FileServer(6667);
+            fileServer.start();
+
         }
         catch (Exception ex)
         {

@@ -56,26 +56,39 @@ public class ClientMessageHandler implements MessageHandler
 
             List<FileBody> files = HttpRequester.GETList(nameServerAddress, FileBody[].class);
 
-            files.forEach(f -> logger.info("Received files to replicate: " + f.getFilename()));
 
             if (files != null && !files.isEmpty())
             for (FileBody file : files)
             {
-                logger.info("ask for" + file.getFilename());
+
                 if (!file.getNode().getName().equals(Node.getClient().getName()))
                 {
                     try
                     {
+                        logger.info("ask for: " + file.getFilename());
+                        logger.info("name: " + file.getFilename()+" IP: "+Node.getClient().getIpaddress()+" port: "+ Node.getClient().getFileTransferPort());
+                        Node.getFileServer().setFileName(file.getFilename());
+                        FileRequestBody frb = new FileRequestBody(file.getFilename(),Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
+                        logger.info("name: " + file.getFilename()+" IP to: "+file.getNode().getIpaddress()+" port to: "+ file.getNode().getMcPort());
+                        this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(),file.getNode().getMcPort());
+                        /*
                         logger.info("Started downloading " + file.getFilename());
                         Node.getFileTransferSocket().downloadFile(file.getNode().getIpaddress(), file.getNode().getFilePort(),
                                 file.getFilename());
-                        logger.info("Download done");
+                        logger.info("Download done");*/
                     } catch (Exception e)
                     {
                         logger.error(e.getMessage());
                     }
                 }
             }
+        }
+        else if(sb.getType().equals("file"))
+        {
+            logger.info("File message received");
+            FileRequestBody frb = gson.fromJson(msg, FileRequestBody.class);
+            logger.info("Sending file: "+frb.getFilename());
+            FileClient fileClient =new FileClient(frb.getMyIpaddress(), frb.getFilePort(), "files/"+frb.getFilename());
         }
     }
 

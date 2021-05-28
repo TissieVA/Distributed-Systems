@@ -88,7 +88,7 @@ public class MulticastSocketServer
             }
             catch (Exception e)
             {
-                //logger.error("Received malformed multicast message", e);
+                logger.error("Received malformed multicast message", e);
             }
         }
 
