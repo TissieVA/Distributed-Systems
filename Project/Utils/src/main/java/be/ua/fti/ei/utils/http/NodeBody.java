@@ -9,7 +9,7 @@ public class NodeBody
     private int filePort;
     private int mcPort;
 
-    public NodeBody(String name, String ipaddress, int filePort, int mcPort)
+    public NodeBody(String name, String ipaddress, int mcPort, int filePort)
     {
         this.name = name;
         this.ipaddress = ipaddress;

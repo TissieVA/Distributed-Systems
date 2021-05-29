@@ -52,7 +52,7 @@ public class Node
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", Node.client.getMulticastPort(),
                     new ClientMessageHandler());
             //Node.fileSocket = new FileTransferSocket(Node.client.getFileTransferPort());
-            Node.fileServer = new FileServer(6667);
+            Node.fileServer = new FileServer(Node.client.getFileTransferPort());
             fileServer.start();
 
         }

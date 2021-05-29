@@ -1,63 +1,82 @@
 package be.ua.fti.ei.client;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.DataInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class FileServer extends Thread {
+public class FileServer extends Thread
+{
+    private String fileName;
+    private ServerSocket serverSocket;
+    private boolean running;
 
-    private ServerSocket ss;
-    private String fileName = "test";
-    private static final Logger logger = LoggerFactory.getLogger(FileServer.class);
+    public FileServer(int port) throws IOException
+    {
 
-    public FileServer(int port) {
-        try {
-            ss = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
+        try
+        {
+            this.serverSocket = new ServerSocket(port);
+        } catch (IOException e)
+        {
+            System.out.println("Can't setup server on this port number. ");
         }
+
     }
 
+
     public void run() {
-        while (true) {
+        this.running = true;
+        while (running) {
             try {
-                Socket clientSock = ss.accept();
-                saveFile(clientSock);
+                Socket socket = serverSocket.accept();
+                saveFile(socket);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
 
-    private void saveFile(Socket clientSock) throws IOException {
-        DataInputStream dis = new DataInputStream(clientSock.getInputStream());
-        logger.info(fileName);
-        FileOutputStream fos = new FileOutputStream("replicates/"+fileName);
-        byte[] buffer = new byte[4096];
-
-        int filesize = 15123; // Send file size in separate msg
-        int read = 0;
-        int totalRead = 0;
-        int remaining = filesize;
-        while((read = dis.read(buffer, 0, Math.min(buffer.length, remaining))) > 0) {
-            totalRead += read;
-            remaining -= read;
-            System.out.println("read " + totalRead + " bytes.");
-            fos.write(buffer, 0, read);
+        try
+        {
+            serverSocket.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
-
-        fos.close();
-        dis.close();
     }
+
+    private void saveFile(Socket clientSocket) throws IOException
+    {
+
+            InputStream in = null;
+            OutputStream out = null;
+            in = clientSocket.getInputStream();
+            out = new FileOutputStream("replicates/"+fileName);
+            byte[] bytes = new byte[16*1024];
+
+            int count;
+            while ((count = in.read(bytes)) > 0) {
+                out.write(bytes, 0, count);
+            }
+
+            out.close();
+            in.close();
+            clientSocket.close();
+    }
+
 
     public void setFileName(String fileName)
     {
         this.fileName = fileName;
+    }
+
+    public boolean isRunning()
+    {
+        return running;
+    }
+
+    public void setRunning(boolean running)
+    {
+        this.running = running;
     }
 }
