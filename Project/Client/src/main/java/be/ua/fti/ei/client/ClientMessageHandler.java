@@ -34,77 +34,83 @@ public class ClientMessageHandler implements MessageHandler
     @Override
     public void parse(SocketBody sb, String msg, String ip, int port)
     {
-        if(sb.getType().equals("ns"))
+        switch (sb.getType())
         {
-            logger.info("Nameserver message received");
-            
-            NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
-            String nameServerAddress = "http://" + ip + ":" + nsrb.getPort();
-            Node.getClient().setNameServerAddress(nameServerAddress);
-            try
+            case "ns":
             {
-                sendAddNodeRestRequest();
-            } catch (JsonProcessingException e)
-            {
-                logger.error(e.getMessage());
-            }
-        }
-        else if(sb.getType().equals("update"))
-        {
-            logger.info("Update message received");
+                logger.info("Nameserver message received");
 
-            String nameServerAddress = Node.getClient().getNameServerAddress() + "/replicates/" +
-                    Node.getClient().getName();
-
-            List<FileBody> files = HttpRequester.GETList(nameServerAddress, FileBody[].class);
-
-
-            if (files != null && !files.isEmpty())
-            for (FileBody file : files)
-            {
-
-                if (!file.getNode().getName().equals(Node.getClient().getName()))
+                NameServerResponseBody nsrb = gson.fromJson(msg, NameServerResponseBody.class);
+                String nameServerAddress = "http://" + ip + ":" + nsrb.getPort();
+                Node.getClient().setNameServerAddress(nameServerAddress);
+                try
                 {
-                    try
+                    sendAddNodeRestRequest();
+                } catch (JsonProcessingException e)
+                {
+                    logger.error(e.getMessage());
+                }
+                break;
+            }
+            case "update":
+            {
+                logger.info("Update message received");
+
+                String nameServerAddress = Node.getClient().getNameServerAddress() + "/replicates/" +
+                        Node.getClient().getName();
+
+                List<FileBody> files = HttpRequester.GETList(nameServerAddress, FileBody[].class);
+
+
+                if (files != null && !files.isEmpty())
+                    for (FileBody file : files)
                     {
-                        Node.getFileServer().setReceived(false);
-                        logger.info("ask for: " + file.getFilename());
 
-                        // Tell the server the file wanting to receive
-                        Node.getFileServer().setFileName(file.getFilename());
-
-                        // Send a unicast to the node containing the file that it should sent the file to this Node
-                        // (details of this node in frb)
-                        FileRequestBody frb = new FileRequestBody(file.getFilename(),Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
-                        this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(),file.getNode().getMcPort());
-
-                        long pastTime = System.currentTimeMillis();
-                        while(!Node.getFileServer().isReceived())
+                        if (!file.getNode().getName().equals(Node.getClient().getName()))
                         {
-                            long time = System.currentTimeMillis();
-                            if(time >= (pastTime + 10*1000))
+                            try
                             {
-                                logger.error("10 seconds past since the request of "+ file.getFilename());
-                                break;
+                                Node.getFileServer().setReceived(false);
+                                logger.info("ask for: " + file.getFilename());
+
+                                // Tell the server the file wanting to receive
+                                Node.getFileServer().setFileName(file.getFilename());
+
+                                // Send a unicast to the node containing the file that it should sent the file to this Node
+                                // (details of this node in frb)
+                                FileRequestBody frb = new FileRequestBody(file.getFilename(), Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
+                                this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(), file.getNode().getMcPort());
+
+                                long pastTime = System.currentTimeMillis();
+                                while (!Node.getFileServer().isReceived())
+                                {
+                                    long time = System.currentTimeMillis();
+                                    if (time >= (pastTime + 10 * 1000))
+                                    {
+                                        logger.error("10 seconds past since the request of " + file.getFilename());
+                                        break;
+                                    }
+                                }
+
+                            } catch (Exception e)
+                            {
+                                logger.error(e.getMessage());
                             }
                         }
-
-                    } catch (Exception e)
-                    {
-                        logger.error(e.getMessage());
                     }
-                }
+                break;
             }
+            case "file":
+                logger.info("File message received");
+                FileRequestBody frb = gson.fromJson(msg, FileRequestBody.class);
+                logger.info("Sending file: " + frb.getFilename());
+                FileClient fileClient = new FileClient(frb.getMyIpaddress(), frb.getFilePort(), "files/" + frb.getFilename());
+                break;
+
+            default:
+                logger.warn("Message type not recognised, message type: " + sb.getType());
+                break;
         }
-        else if(sb.getType().equals("file"))
-        {
-            logger.info("File message received");
-            FileRequestBody frb = gson.fromJson(msg, FileRequestBody.class);
-            logger.info("Sending file: "+frb.getFilename());
-            FileClient fileClient =new FileClient(frb.getMyIpaddress(), frb.getFilePort(), "files/"+frb.getFilename());
-        }
-        else
-            logger.warn("Message type not recognised, message type: "+sb.getType());
     }
 
     public void sendFindNS(int port)
