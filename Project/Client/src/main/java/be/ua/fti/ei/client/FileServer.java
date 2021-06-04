@@ -9,6 +9,7 @@ public class FileServer extends Thread
     private String fileName;
     private ServerSocket serverSocket;
     private boolean running;
+    private boolean received;
 
     public FileServer(int port) throws IOException
     {
@@ -62,6 +63,7 @@ public class FileServer extends Thread
             out.close();
             in.close();
             clientSocket.close();
+            this.received = true;
     }
 
 
@@ -78,5 +80,15 @@ public class FileServer extends Thread
     public void setRunning(boolean running)
     {
         this.running = running;
+    }
+
+    public boolean isReceived()
+    {
+        return received;
+    }
+
+    public void setReceived(boolean received)
+    {
+        this.received = received;
     }
 }
