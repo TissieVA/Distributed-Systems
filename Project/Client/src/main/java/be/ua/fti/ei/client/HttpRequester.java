@@ -1,14 +1,13 @@
 package be.ua.fti.ei.client;
 
 import com.google.gson.Gson;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.*;
+import java.net.http.HttpResponse;
 import java.util.Arrays;
 import java.util.List;
 

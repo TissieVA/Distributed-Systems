@@ -1,12 +1,14 @@
 package be.ua.fti.ei.client;
 
+import be.ua.fti.ei.utils.http.FileBody;
+import be.ua.fti.ei.utils.http.NodeBody;
+import be.ua.fti.ei.utils.http.PublishBody;
 import be.ua.fti.ei.utils.sockets.*;
-import be.ua.fti.ei.utils.http.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler
@@ -67,13 +69,26 @@ public class ClientMessageHandler implements MessageHandler
                     {
                         Node.getFileServer().setReceived(false);
                         logger.info("ask for: " + file.getFilename());
-                        logger.info("name: " + file.getFilename()+" IP: "+Node.getClient().getIpaddress()+" port: "+ Node.getClient().getFileTransferPort());
+
+                        // Tell the server the file wanting to receive
                         Node.getFileServer().setFileName(file.getFilename());
+
+                        // Send a unicast to the node containing the file that it should sent the file to this Node
+                        // (details of this node in frb)
                         FileRequestBody frb = new FileRequestBody(file.getFilename(),Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
-                        logger.info("name: " + file.getFilename()+" IP to: "+file.getNode().getIpaddress()+" port to: "+ file.getNode().getMcPort());
                         this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(),file.getNode().getMcPort());
 
-                        while(!Node.getFileServer().isReceived()){}
+                        long pastTime = System.currentTimeMillis();
+                        while(!Node.getFileServer().isReceived())
+                        {
+                            long time = System.currentTimeMillis();
+                            if(time >= (pastTime + 10*1000))
+                            {
+                                logger.error("10 seconds past since the request of "+ file.getFilename());
+                                break;
+                            }
+                        }
+
                     } catch (Exception e)
                     {
                         logger.error(e.getMessage());
@@ -88,6 +103,8 @@ public class ClientMessageHandler implements MessageHandler
             logger.info("Sending file: "+frb.getFilename());
             FileClient fileClient =new FileClient(frb.getMyIpaddress(), frb.getFilePort(), "files/"+frb.getFilename());
         }
+        else
+            logger.warn("Message type not recognised, message type: "+sb.getType());
     }
 
     public void sendFindNS(int port)
@@ -139,12 +156,34 @@ public class ClientMessageHandler implements MessageHandler
         logger.info("Download file request");
         NodeBody nb = this.sendFindFile(filename);
 
+
         try
         {
-            Node.getFileTransferSocket().downloadFile(nb.getIpaddress(), nb.getFilePort(), filename);
+            Node.getFileServer().setReceived(false);
+            logger.info("ask for: " + filename);
+
+            // Tell the server the file wanting to receive
+            Node.getFileServer().setFileName(filename);
+
+            // Send a unicast to the node containing the file that it should sent the file to this Node
+            // (details of this node in frb)
+            FileRequestBody frb = new FileRequestBody(filename,Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
+            this.mss.sendUnicastMessage(gson.toJson(frb), nb.getIpaddress(),nb.getMcPort());
+
+            long pastTime = System.currentTimeMillis();
+            while(!Node.getFileServer().isReceived())
+            {
+                long time = System.currentTimeMillis();
+                if(time >= (pastTime + 10*1000))
+                {
+                    logger.error("10 seconds past since the request of "+ filename);
+                    break;
+                }
+            }
+
         } catch (Exception e)
         {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
     }

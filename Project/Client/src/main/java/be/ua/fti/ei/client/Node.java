@@ -1,12 +1,11 @@
 package be.ua.fti.ei.client;
 
 import be.ua.fti.ei.utils.sockets.MulticastSocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,9 +24,7 @@ public class Node
     }
 
     private static MulticastSocketServer multicastSocket;
-    private static FileTransferSocket fileSocket;
-    public static FileTransferSocket getFileTransferSocket() {return fileSocket; }
-    //private static FileClient fileClient;
+
     private static FileServer fileServer;
     public static FileServer getFileServer() {return fileServer;}
 
@@ -51,7 +48,6 @@ public class Node
             // Meaning anyone who joins the same multicast ip-group can receive these messages
             Node.multicastSocket = new MulticastSocketServer("230.0.0.7", Node.client.getMulticastPort(),
                     new ClientMessageHandler());
-            //Node.fileSocket = new FileTransferSocket(Node.client.getFileTransferPort());
             Node.fileServer = new FileServer(Node.client.getFileTransferPort());
             fileServer.start();
 
@@ -67,11 +63,7 @@ public class Node
         // Start the multicast socket
 
         Node.multicastSocket.getStartThread().start();
-        // Search NameServer
-        //Node.socket.findNS();
 
-        // Start the file socket
-        Node.fileSocket.getStartThread().start();
 
 
         logger.info(Node.client.getName() + " started successfully!");

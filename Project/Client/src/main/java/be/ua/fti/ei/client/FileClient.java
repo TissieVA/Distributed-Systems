@@ -17,9 +17,7 @@ public class FileClient {
     {
         try
         {
-            logger.info("FileClient -> ip to send to = "+host+" port= "+port);
             socket = new Socket(host, port);
-            logger.info("send over from "+fileName);
             File file = new File(fileName);
             long length = file.length();
             byte[] bytes = new byte[16 * 1024];

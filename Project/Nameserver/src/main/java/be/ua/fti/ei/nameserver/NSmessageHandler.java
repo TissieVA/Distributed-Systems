@@ -1,6 +1,5 @@
 package be.ua.fti.ei.nameserver;
 
-import be.ua.fti.ei.utils.sockets.MulticastSocketServer;
 import be.ua.fti.ei.utils.sockets.*;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
