@@ -1,9 +1,9 @@
-package be.ua.fti.ei;
-
-import java.io.*;
+package be.ua.fti.ei.nameserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
 
 public class FileHandler
 {

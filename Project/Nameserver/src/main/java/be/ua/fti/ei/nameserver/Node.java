@@ -1,4 +1,6 @@
-package be.ua.fti.ei;
+package be.ua.fti.ei.nameserver;
+
+import be.ua.fti.ei.utils.http.NodeBody;
 
 public class Node implements java.io.Serializable
 {
@@ -53,5 +55,10 @@ public class Node implements java.io.Serializable
     public void setFilePort(int filePort)
     {
         this.filePort = filePort;
+    }
+
+    public NodeBody getBody()
+    {
+        return new NodeBody(this.name, this.ipaddress, this.mcPort, this.filePort);
     }
 }

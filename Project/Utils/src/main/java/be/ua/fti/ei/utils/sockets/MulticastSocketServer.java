@@ -1,12 +1,11 @@
-package be.ua.fti.ei.sockets;
+package be.ua.fti.ei.utils.sockets;
 
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 
 
 public class MulticastSocketServer
@@ -79,27 +78,36 @@ public class MulticastSocketServer
             InetAddress ip = packet.getAddress();
             int port = packet.getPort();
 
-            String received = new String(packet.getData(), 0, packet.getLength());
-            SocketBody body = this.gson.fromJson(received, SocketBody.class);
-            logger.info("Received message type: " + body.getType());
-            this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+            try
+            {
+                String received = new String(packet.getData(), 0, packet.getLength());
+                SocketBody body = this.gson.fromJson(received, SocketBody.class);
+                //this.messageHandler.parse(body, received, ip.getHostAddress(), port);
+                new ParseThread(body, received, ip.getHostAddress(), port, this.messageHandler).start();
+
+            }
+            catch (Exception e)
+            {
+                logger.error("Received malformed multicast message", e);
+            }
         }
 
+        logger.info("Socket Closed");
         this.socket.close();
     }
 
     /**
      * Send a multicast message
      */
-    public void sendMessage(String msg)
+    public void sendMessage(String msg, int port)
     {
         byte[] buf = msg.getBytes(StandardCharsets.UTF_8);
 
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, 6667);
+        DatagramPacket packet = new DatagramPacket(buf, buf.length, this.address, port);
 
         try
         {
-            logger.info("Unicast send");
+            logger.info("Multicast sent");
             this.socket.send(packet);
         }
         catch (Exception ex)
@@ -109,7 +117,7 @@ public class MulticastSocketServer
     }
 
     /**
-     * Send a multicast message
+     * Send a unicast message
      */
     public void sendUnicastMessage(String msg, String ipaddress, int port)
     {
@@ -117,6 +125,7 @@ public class MulticastSocketServer
 
         try
         {
+            logger.info("Unicast sent");
             DatagramPacket packet = new DatagramPacket(buf, buf.length, InetAddress.getByName(ipaddress), port);
             this.socket.send(packet);
         }
@@ -125,8 +134,6 @@ public class MulticastSocketServer
             logger.error(ex.getMessage());
         }
     }
-
-
 
     /**
      * Stop the socket server
@@ -159,5 +166,28 @@ class StartSocketThread extends Thread
     public void run()
     {
         this.socket.startServer();
+    }
+}
+
+class ParseThread extends Thread
+{
+    MessageHandler mh;
+    SocketBody body;
+    String received;
+    String ip;
+    int port;
+
+    public ParseThread(SocketBody body, String received, String ip, int port, MessageHandler mh)
+    {
+        this.mh = mh;
+        this.body = body;
+        this.received = received;
+        this.port = port;
+        this.ip = ip;
+    }
+
+    public void run()
+    {
+        this.mh.parse(body, received, ip, port);
     }
 }

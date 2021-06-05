@@ -1,4 +1,4 @@
-package be.ua.fti.ei.sockets;
+package be.ua.fti.ei.utils.sockets;
 
 public interface MessageHandler
 {
