@@ -7,12 +7,14 @@ public class NodeBody
     private String name;
     private String ipaddress;
     private int filePort;
+    private int mcPort;
 
-    public NodeBody(String name, String ipaddress, int filePort)
+    public NodeBody(String name, String ipaddress, int mcPort, int filePort)
     {
         this.name = name;
         this.ipaddress = ipaddress;
         this.filePort = filePort;
+        this.mcPort = mcPort;
     }
 
     public NodeBody()
@@ -52,5 +54,15 @@ public class NodeBody
     public void setFilePort(int filePort)
     {
         this.filePort = filePort;
+    }
+
+    public int getMcPort()
+    {
+        return mcPort;
+    }
+
+    public void setMcPort(int mcPort)
+    {
+        this.mcPort = mcPort;
     }
 }

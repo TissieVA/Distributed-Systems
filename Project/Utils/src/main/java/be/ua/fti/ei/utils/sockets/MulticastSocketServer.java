@@ -3,6 +3,7 @@ package be.ua.fti.ei.utils.sockets;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
@@ -82,14 +83,13 @@ public class MulticastSocketServer
             {
                 String received = new String(packet.getData(), 0, packet.getLength());
                 SocketBody body = this.gson.fromJson(received, SocketBody.class);
-                logger.info("Received message type: " + body.getType());
                 //this.messageHandler.parse(body, received, ip.getHostAddress(), port);
                 new ParseThread(body, received, ip.getHostAddress(), port, this.messageHandler).start();
 
             }
             catch (Exception e)
             {
-                //logger.error("Received malformed multicast message", e);
+                logger.error("Received malformed multicast message", e);
             }
         }
 

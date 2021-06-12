@@ -2,17 +2,16 @@ package be.ua.fti.ei.nameserver;
 
 import be.ua.fti.ei.utils.Hasher;
 import be.ua.fti.ei.utils.http.FileBody;
-import be.ua.fti.ei.utils.http.NodeBody;
 import be.ua.fti.ei.utils.sockets.NextPreviousBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.*;
-import java.util.Iterator;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import org.slf4j.Logger;

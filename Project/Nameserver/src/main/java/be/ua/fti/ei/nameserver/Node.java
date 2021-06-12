@@ -83,6 +83,6 @@ public class Node implements java.io.Serializable
 
     public NodeBody getBody()
     {
-        return new NodeBody(this.name, this.ipaddress, this.filePort);
+        return new NodeBody(this.name, this.ipaddress, this.mcPort, this.filePort);
     }
 }
