@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class Controller
@@ -58,6 +61,54 @@ public class Controller
 
         return Database.getInstance().removeNode(nodeName); // remove the node (works)
     }
+
+
+    @GetMapping("/nodes")
+    List<String> getAllNodes()
+    {
+        return  Database.getInstance().getHostDatabase().values().stream().map(Node::getName)
+                .collect(Collectors.toList());
+
+    }
+
+    @GetMapping("/files")
+    ArrayList<String> getAllFiles()
+    {
+        return (ArrayList<String>) Database.getInstance().getHostDatabase().values().stream()
+                .flatMap(n -> n.getFiles().stream()).collect(Collectors.toList());
+    }
+
+    @GetMapping("/nextprevious/{node}")
+    ArrayList<String> getNextPrevious(@PathVariable String node)
+    {
+        int hash = Hasher.getHash(node);
+        int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
+        System.out.println("higherneighbour hash"+ higherNeighbour);
+        int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+        System.out.println("lowerneighbour hash "+lowerNeighbour );
+
+        String higher = Database.getInstance().getHostDatabase().get(higherNeighbour).getName();
+        String lower = Database.getInstance().getHostDatabase().get(lowerNeighbour).getName();
+
+        System.out.println("Higher neighbour"+Database.getInstance().getHostDatabase().get(higherNeighbour).getName());
+
+        ArrayList<String> ret = new ArrayList<String>();
+        ret.add(higher);
+        ret.add(lower);
+        System.out.println("arraylist "+ ret.get(0) + ret.get(1));
+
+        return ret;
+    }
+
+
+
+    @GetMapping("/files/{node}")
+    List<String> getFilesInNode(@PathVariable String node)
+    {
+        int hash = Hasher.getHash(node);
+        return Database.getInstance().getHostDatabase().get(hash).getFiles();
+    }
+
 
     @GetMapping("/replicates/{nodeName}")
     List<FileBody> getReplicates(@PathVariable String nodeName)

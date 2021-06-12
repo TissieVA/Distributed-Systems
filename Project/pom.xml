@@ -24,6 +24,7 @@
         <module>Nameserver</module>
         <module>Client</module>
         <module>Utils</module>
+        <module>GUI</module>
     </modules>
 
     <properties>

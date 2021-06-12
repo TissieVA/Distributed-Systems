@@ -1,5 +1,7 @@
 package be.ua.fti.ei.client;
 
+
+import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.http.FileBody;
 import be.ua.fti.ei.utils.http.NodeBody;
 import be.ua.fti.ei.utils.http.PublishBody;

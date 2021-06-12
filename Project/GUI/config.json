@@ -1,0 +1,7 @@
+{
+  "ipAddress":"127.0.0.1",
+  "ifName":"Ethernet 2",
+  "fileTransferPort":6665,
+  "multicastPort":6666,
+  "httpPort":8080
+}

@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.awt.*;
+
 @SpringBootApplication
 public class Server
 {
@@ -16,7 +18,6 @@ public class Server
     public static void main(String[] args)
     {
         SpringApplication.run(Server.class, args);
-
         try
         {
             Server.multicastSocket = new MulticastSocketServer("230.0.0.7", 6667,

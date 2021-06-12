@@ -14,6 +14,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Database
 {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
@@ -122,12 +125,15 @@ public class Database
         }
 
         this.hostDatabase.put(hash, new Node(hostname, ipAddress, mcPort, filePort));
+        this.hostDatabase.get(hash).addFiles(files);
 
-        System.out.println("hostname: " + hostname + "=" + hash);
+        logger.info("Node " + hostname + " with hash=" + hash + " and ip=" + ipAddress + " has been added.");
 
         files.forEach(x -> {
+
             localFileDatabase.put(Hasher.getHash(x), new FileBody(x, this.hostDatabase.get(hash).getBody()));
             System.out.println(x + "=" + Hasher.getHash(x));
+
         });
 
         this.buildReplicateDatabase();
@@ -217,7 +223,7 @@ public class Database
     {
         List<Integer> ascendingStream = this.hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
 
-        return ascendingStream.stream().filter(integer -> integer >= hostId).findFirst()
+        return ascendingStream.stream().filter(integer -> integer > hostId).findFirst()
                 .orElse(ascendingStream.get(0));
     }
 

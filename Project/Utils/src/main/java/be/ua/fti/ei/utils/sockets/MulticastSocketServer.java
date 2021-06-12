@@ -35,8 +35,9 @@ public class MulticastSocketServer
 
         this.socket = new MulticastSocket(this.port);
 
+
         InetSocketAddress inetSocketAddress = new InetSocketAddress(this.address, this.port);
-        this.socket.joinGroup(inetSocketAddress, NetworkInterface.getByName("ethwe0"));
+        this.socket.joinGroup(inetSocketAddress, NetworkInterface.getByName("Ethernet 2"));
 
     }
 

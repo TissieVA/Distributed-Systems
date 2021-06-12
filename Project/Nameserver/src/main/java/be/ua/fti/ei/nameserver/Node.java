@@ -2,6 +2,9 @@ package be.ua.fti.ei.nameserver;
 
 import be.ua.fti.ei.utils.http.NodeBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node implements java.io.Serializable
 {
     private String name;
@@ -10,7 +13,12 @@ public class Node implements java.io.Serializable
     private int mcPort;
     private int filePort;
 
-    public Node() { }
+    private ArrayList<String> files;
+
+    public Node()
+    {
+        this.files = new ArrayList<>();
+    }
 
     public Node(String name, String ipaddress, int mcPort, int filePort)
     {
@@ -18,6 +26,7 @@ public class Node implements java.io.Serializable
         this.ipaddress = ipaddress;
         this.mcPort = mcPort;
         this.filePort = filePort;
+        this.files = new ArrayList<>();
     }
 
     public String getIpaddress()
@@ -55,6 +64,21 @@ public class Node implements java.io.Serializable
     public void setFilePort(int filePort)
     {
         this.filePort = filePort;
+    }
+
+    public void addFiles(List<String> files)
+    {
+        this.files.addAll(files);
+    }
+
+    public ArrayList<String> getFiles()
+    {
+        return this.files;
+    }
+
+    public void setFiles(ArrayList<String> files)
+    {
+        this.files = files;
     }
 
     public NodeBody getBody()
