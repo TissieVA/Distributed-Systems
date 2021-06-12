@@ -122,24 +122,28 @@ public class GUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String textfieldname = tfNameOfNode.getText();
                 List<String> fileList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/files/"+textfieldname,String[].class);
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder stringBuilderFile = new StringBuilder();
                 for(String str : fileList)
                 {
-                    stringBuilder.append(str);
-                    stringBuilder.append(" ,  ");
+                    stringBuilderFile.append(str);
+                    stringBuilderFile.append(" , ");
                 }
 
-                FilesListText.setText(stringBuilder.toString());
+                if(stringBuilderFile.length() > 2)
+                    stringBuilderFile.delete(stringBuilderFile.length()-2,stringBuilderFile.length());
+                FilesListText.setText(stringBuilderFile.toString());
 
 
                 List<FileBody> replicateFileList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/replicates/"+textfieldname,FileBody[].class);
-                StringBuilder stringBuilder2 = new StringBuilder();
+                StringBuilder stringBuilderReplicates = new StringBuilder();
                 replicateFileList.forEach(f ->{
-                    stringBuilder2.append(f.getFilename());
-                    stringBuilder2.append(" , ");
+                    stringBuilderReplicates.append(f.getFilename());
+                    stringBuilderReplicates.append(" , ");
                 });
 
-                ReplicatedFilesList.setText(stringBuilder2.toString());
+                if(stringBuilderReplicates.length() > 2)
+                    stringBuilderReplicates.delete(stringBuilderReplicates.length()-2,stringBuilderReplicates.length());
+                ReplicatedFilesList.setText(stringBuilderReplicates.toString());
 
             }
         });
