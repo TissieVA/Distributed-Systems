@@ -1,5 +1,6 @@
 package be.ua.fti.ei;
 
+import be.ua.fti.ei.utils.http.FileBody;
 import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.http.PublishBody;
 import be.ua.fti.ei.utils.sockets.NextPreviousBody;
@@ -52,7 +53,7 @@ public class GUI extends JFrame{
 
 
     public GUI() throws Exception {
-        super("distributed");
+        super("GUI");
 
         NSConfig nsConfig = NSConfig.load("GUI\\config.json");
 
@@ -127,8 +128,19 @@ public class GUI extends JFrame{
                     stringBuilder.append(str);
                     stringBuilder.append(" ,  ");
                 }
-                String str = stringBuilder.toString();
-                FilesListText.setText(str);
+
+                FilesListText.setText(stringBuilder.toString());
+
+
+                List<FileBody> replicateFileList = HttpRequester.GETList("http://" + nsConfig.getIpAddress() + ":" + nsConfig.getHttpPort() + "/replicates/"+textfieldname,FileBody[].class);
+                StringBuilder stringBuilder2 = new StringBuilder();
+                replicateFileList.forEach(f ->{
+                    stringBuilder2.append(f.getFilename());
+                    stringBuilder2.append(" , ");
+                });
+
+                ReplicatedFilesList.setText(stringBuilder2.toString());
+
             }
         });
         ConfigButton.addActionListener(new ActionListener() {

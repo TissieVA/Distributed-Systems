@@ -85,13 +85,18 @@ public class Controller
         int higherNeighbour = Database.getInstance().getHigherNeighbour(hash);
         System.out.println("higherneighbour hash"+ higherNeighbour);
         int lowerNeighbour = Database.getInstance().getLowerNeighbour(hash);
+        System.out.println("lowerneighbour hash "+lowerNeighbour );
+
         String higher = Database.getInstance().getHostDatabase().get(higherNeighbour).getName();
         String lower = Database.getInstance().getHostDatabase().get(lowerNeighbour).getName();
+
         System.out.println("Higher neighbour"+Database.getInstance().getHostDatabase().get(higherNeighbour).getName());
 
         ArrayList<String> ret = new ArrayList<String>();
         ret.add(higher);
         ret.add(lower);
+        System.out.println("arraylist "+ ret.get(0) + ret.get(1));
+
         return ret;
     }
 

@@ -224,7 +224,7 @@ public class Database
     {
         List<Integer> ascendingStream = this.hostDatabase.keySet().stream().sorted().collect(Collectors.toList());
 
-        return ascendingStream.stream().filter(integer -> integer >= hostId).findFirst()
+        return ascendingStream.stream().filter(integer -> integer > hostId).findFirst()
                 .orElse(ascendingStream.get(0));
     }
 
