@@ -118,8 +118,14 @@ public class Controller
     }
 
     @PostMapping("/files/add")
-    void NewFileAddedToNode(@RequestBody FileBody body)
+    void newFileAddedToNode(@RequestBody FileBody body)
     {
         Database.getInstance().addFileToNode(body.getNode().getName(), body.getFilename());
+    }
+
+    @PostMapping("/files/delete")
+    void removeFileFromNode(@RequestBody FileBody body)
+    {
+        Database.getInstance().removeFileFromNode(body.getNode().getName(), body.getFilename());
     }
 }

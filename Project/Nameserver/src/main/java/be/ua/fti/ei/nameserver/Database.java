@@ -35,6 +35,7 @@ public class Database
 
     public void buildReplicateDatabase()
     {
+        this.replicateDatabase.clear();
         logger.info("Building replicates");
         this.localFileDatabase.values().stream().map(FileBody::getFilename).forEach(file -> {
             int replicateHost = this.getReplicateId(Hasher.getHash(file));
@@ -203,6 +204,18 @@ public class Database
             return true;
         }
         return false;
+    }
+
+    public void removeFileFromNode(String hostname, String filename)
+    {
+        int replicatedLocation = this.getReplicateId(filename);
+
+        localFileDatabase.remove(Hasher.getHash(filename));
+
+        this.buildReplicateDatabase();
+        outputXML();
+
+        NSmessageHandler.getInstance().updateOneNode(replicatedLocation);
     }
 
     public NextPreviousBody getNeighbours(String hostname)

@@ -43,7 +43,6 @@ public class DirectoryUpdateCheck extends Thread
                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE))
                 {
                     System.out.println("File added");
-                    System.out.println(event.context());
                     String filename = event.context().toString();
                     if (!(filename.contains(".swp") || filename.startsWith(".")))
                     {
@@ -54,11 +53,16 @@ public class DirectoryUpdateCheck extends Thread
                 else if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE))
                 {
                     System.out.println("File Deleted");
+                    String filename = event.context().toString();
+                    if (!(filename.contains(".swp") || filename.startsWith(".")))
+                    {
+                        FileBody fb = new FileBody(filename, Node.getClient().getNodeBody());
+                        HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/delete", gson.toJson(fb));
+                    }
                 }
                 else if (event.kind().equals(StandardWatchEventKinds.ENTRY_MODIFY))
                 {
                     System.out.println("File modified");
-                    System.out.println("Context = "+event.context().toString());
                     String filename = event.context().toString();
                     if (!(filename.contains(".swp") || filename.startsWith(".")))
                     {

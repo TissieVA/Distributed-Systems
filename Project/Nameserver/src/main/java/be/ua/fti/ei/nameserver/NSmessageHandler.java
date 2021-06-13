@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.crypto.Data;
+
 
 public class NSmessageHandler implements MessageHandler
 {
@@ -97,6 +99,7 @@ public class NSmessageHandler implements MessageHandler
         this.mss.sendUnicastMessage(msg,Database.getInstance().getHostDatabase().get(nodeId).getIpaddress(),
         Database.getInstance().getHostDatabase().get(nodeId).getMcPort());
     }
+
 
     private static NSmessageHandler instance;
 
