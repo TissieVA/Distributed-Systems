@@ -13,10 +13,6 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Database
 {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);

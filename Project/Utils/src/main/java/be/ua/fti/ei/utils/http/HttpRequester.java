@@ -1,6 +1,7 @@
 package be.ua.fti.ei.utils.http;
 
 import com.google.gson.Gson;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;

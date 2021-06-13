@@ -2,12 +2,10 @@ package be.ua.fti.ei.client;
 
 import be.ua.fti.ei.utils.http.FileBody;
 import be.ua.fti.ei.utils.http.HttpRequester;
-import be.ua.fti.ei.utils.http.NodeBody;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.List;
 
 public class DirectoryUpdateCheck extends Thread
 {

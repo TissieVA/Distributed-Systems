@@ -1,8 +1,8 @@
 package be.ua.fti.ei.client;
 
 
-import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.http.FileBody;
+import be.ua.fti.ei.utils.http.HttpRequester;
 import be.ua.fti.ei.utils.http.NodeBody;
 import be.ua.fti.ei.utils.http.PublishBody;
 import be.ua.fti.ei.utils.sockets.*;
@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler
