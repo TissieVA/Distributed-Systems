@@ -1,5 +1,7 @@
 package be.ua.fti.ei.client;
 
+import be.ua.fti.ei.utils.http.NodeBody;
+
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 
@@ -117,5 +119,10 @@ public class Client
 
     public void setMulticastPort(int multicastPort) {
         this.multicastPort = multicastPort;
+    }
+
+    public NodeBody getNodeBody()
+    {
+        return new NodeBody(name,ipaddress,this.fileTransferPort,this.multicastPort);
     }
 }

@@ -1,5 +1,6 @@
 package be.ua.fti.ei.nameserver;
 
+import be.ua.fti.ei.utils.Hasher;
 import be.ua.fti.ei.utils.sockets.*;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -84,6 +85,17 @@ public class NSmessageHandler implements MessageHandler
         Database.getInstance().getHostDatabase().values().stream().map(Node::getMcPort).distinct().forEach(port ->
                 this.mss.sendMessage(msg, port));
 
+    }
+
+    public void updateOneNode(int nodeId)
+    {
+
+        logger.info("sending update message to single node");
+        SocketBody sb = new SocketBody("update");
+        String msg = gson.toJson(sb);
+
+        this.mss.sendUnicastMessage(msg,Database.getInstance().getHostDatabase().get(nodeId).getIpaddress(),
+        Database.getInstance().getHostDatabase().get(nodeId).getMcPort());
     }
 
     private static NSmessageHandler instance;
