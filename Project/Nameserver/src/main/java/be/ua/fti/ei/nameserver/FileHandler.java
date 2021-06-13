@@ -48,7 +48,7 @@ public class FileHandler
         }
         catch (FileNotFoundException e)
         {
-            logger.error(e.getMessage());
+            logger.warn(e.getMessage());
             return null;
         }
     }

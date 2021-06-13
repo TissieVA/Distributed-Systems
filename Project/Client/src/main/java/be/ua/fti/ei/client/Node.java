@@ -55,8 +55,8 @@ public class Node
             Node.fileServer = new FileServer(Node.client.getFileTransferPort());
             fileServer.start();
 
-            Node.duc = new DirectoryUpdateCheck(Paths.get(System.getProperty("user.dir"),"replicates/"));
-
+            Node.duc = new DirectoryUpdateCheck(Paths.get(System.getProperty("user.dir"),"files/"));
+            duc.start();
 
         }
         catch (Exception ex)

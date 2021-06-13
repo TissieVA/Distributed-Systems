@@ -9,36 +9,47 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 
-public class DirectoryUpdateCheck
+public class DirectoryUpdateCheck extends Thread
 {
-    WatchService watchService;
-    Path path;
-    WatchKey key;
+    private final WatchService watchService;
+    private WatchKey key;
     private static Gson gson;
 
     public DirectoryUpdateCheck(Path path) throws IOException
     {
+        this.gson = new Gson();
         this.watchService = FileSystems.getDefault().newWatchService();
-        this.path = path;
-        this.path.register(
+        path.register(
                 watchService,
                 StandardWatchEventKinds.ENTRY_CREATE,
                 StandardWatchEventKinds.ENTRY_DELETE,
                 StandardWatchEventKinds.ENTRY_MODIFY);
     }
 
-    public void start() throws InterruptedException
+    public void run()
     {
-        while ((key = watchService.take()) != null)
+        while (true)
         {
+            try
+            {
+                if ((key = watchService.take()) == null) break;
+            } catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
             for(WatchEvent<?> event : key.pollEvents())
             {
 
                 if (event.kind().equals(StandardWatchEventKinds.ENTRY_CREATE))
                 {
                     System.out.println("File added");
-                    FileBody fb = new FileBody(event.context().toString(),Node.getClient().getNodeBody());
-                    HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
+                    System.out.println(event.context());
+                    String filename = event.context().toString();
+                    if (!(filename.contains(".swp") || filename.startsWith(".")))
+                    {
+                        FileBody fb = new FileBody(filename, Node.getClient().getNodeBody());
+                        HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
+                    }
                 }
                 else if (event.kind().equals(StandardWatchEventKinds.ENTRY_DELETE))
                 {
@@ -47,8 +58,13 @@ public class DirectoryUpdateCheck
                 else if (event.kind().equals(StandardWatchEventKinds.ENTRY_MODIFY))
                 {
                     System.out.println("File modified");
-                    FileBody fb = new FileBody(event.context().toString(),Node.getClient().getNodeBody());
-                    HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
+                    System.out.println("Context = "+event.context().toString());
+                    String filename = event.context().toString();
+                    if (!(filename.contains(".swp") || filename.startsWith(".")))
+                    {
+                        FileBody fb = new FileBody(filename, Node.getClient().getNodeBody());
+                        HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
+                    }
                 }
             }
             key.reset();
