@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,20 +45,19 @@ public class Controller
 
             return null;
 
-
+        NSmessageHandler.getInstance().updateNeighbours(Hasher.getHash(body.getHostname()),false);
         return Database.getInstance().getNeighbours(body.getHostname());
     }
 
     //The remove node is not yet fully finished, needs to implement the next and previous node
     @GetMapping("/remove/{nodeName}")
-    boolean removeNode(@PathVariable String nodeName)
+    void removeNode(@PathVariable String nodeName)
     {
         logger.info("Remove node request received");
         int hash = Hasher.getHash(nodeName);
 
-        NSmessageHandler.getInstance().updateNeighboursAfterDeletion(hash);
+        NSmessageHandler.getInstance().updateNeighbours(hash,true);
 
-        return Database.getInstance().removeNode(nodeName); // remove the node (works)
     }
 
 
