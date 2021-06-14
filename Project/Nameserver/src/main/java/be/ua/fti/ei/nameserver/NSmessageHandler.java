@@ -88,6 +88,18 @@ public class NSmessageHandler implements MessageHandler
 
     }
 
+    public void updateOneNode(int nodeId)
+    {
+
+        logger.info("sending update message to single node");
+        SocketBody sb = new SocketBody("update");
+        String msg = gson.toJson(sb);
+
+        this.mss.sendUnicastMessage(msg,Database.getInstance().getHostDatabase().get(nodeId).getIpaddress(),
+        Database.getInstance().getHostDatabase().get(nodeId).getMcPort());
+    }
+
+
     private static NSmessageHandler instance;
 
     public static NSmessageHandler getInstance()

@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -27,6 +28,8 @@ public class Node
 
     private static FileServer fileServer;
     public static FileServer getFileServer() {return fileServer;}
+
+    private static DirectoryUpdateCheck duc;
 
     public static void main(String[] args)
     {
@@ -50,6 +53,9 @@ public class Node
                     new ClientMessageHandler());
             Node.fileServer = new FileServer(Node.client.getFileTransferPort());
             fileServer.start();
+
+            Node.duc = new DirectoryUpdateCheck(Paths.get(System.getProperty("user.dir"),"files/"));
+            duc.start();
 
         }
         catch (Exception ex)

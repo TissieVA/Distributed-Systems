@@ -8,9 +8,12 @@ import be.ua.fti.ei.utils.http.PublishBody;
 import be.ua.fti.ei.utils.sockets.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class ClientMessageHandler implements MessageHandler
@@ -57,7 +60,16 @@ public class ClientMessageHandler implements MessageHandler
             case "update":
             {
                 logger.info("Update message received");
-
+                File dir = new File(System.getProperty("user.dir")+"/replicates");
+                System.out.println(System.getProperty("user.dir")+"/replicates");
+                try
+                {
+                    FileUtils.forceMkdir(dir);
+                    FileUtils.cleanDirectory(dir);
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
                 String nameServerAddress = Node.getClient().getNameServerAddress() + "/replicates/" +
                         Node.getClient().getName();
 
@@ -84,13 +96,14 @@ public class ClientMessageHandler implements MessageHandler
                                 this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(), file.getNode().getMcPort());
 
                                 long pastTime = System.currentTimeMillis();
-                                while (!Node.getFileServer().isReceived())
+                                boolean fail = false;
+                                while (!Node.getFileServer().isReceived() && !fail)
                                 {
                                     long time = System.currentTimeMillis();
                                     if (time >= (pastTime + 10 * 1000))
                                     {
                                         logger.error("10 seconds past since the request of " + file.getFilename());
-                                        break;
+                                        fail = true;
                                     }
                                 }
 
@@ -159,40 +172,12 @@ public class ClientMessageHandler implements MessageHandler
         return nb;
     }
 
-    public void downloadFile(String filename)
+    public void sendNewFileAdded(String file)
     {
-        logger.info("Download file request");
-        NodeBody nb = this.sendFindFile(filename);
-
-
-        try
-        {
-            Node.getFileServer().setReceived(false);
-            logger.info("ask for: " + filename);
-
-            // Tell the server the file wanting to receive
-            Node.getFileServer().setFileName(filename);
-
-            // Send a unicast to the node containing the file that it should sent the file to this Node
-            // (details of this node in frb)
-            FileRequestBody frb = new FileRequestBody(filename,Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
-            this.mss.sendUnicastMessage(gson.toJson(frb), nb.getIpaddress(),nb.getMcPort());
-
-            long pastTime = System.currentTimeMillis();
-            while(!Node.getFileServer().isReceived())
-            {
-                long time = System.currentTimeMillis();
-                if(time >= (pastTime + 10*1000))
-                {
-                    logger.error("10 seconds past since the request of "+ filename);
-                    break;
-                }
-            }
-
-        } catch (Exception e)
-        {
-            logger.error(e.getMessage());
-        }
-
+        FileBody fb = new FileBody(file,Node.getClient().getNodeBody());
+        HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
     }
+
+
+
 }

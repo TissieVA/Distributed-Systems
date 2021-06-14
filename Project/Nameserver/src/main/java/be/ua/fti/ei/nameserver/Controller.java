@@ -114,4 +114,16 @@ public class Controller
         logger.info("getReplicated request received");
         return Database.getInstance().getReplicatesOfNode(Hasher.getHash(nodeName));
     }
+
+    @PostMapping("/files/add")
+    void newFileAddedToNode(@RequestBody FileBody body)
+    {
+        Database.getInstance().addFileToNode(body.getNode().getName(), body.getFilename());
+    }
+
+    @PostMapping("/files/delete")
+    void removeFileFromNode(@RequestBody FileBody body)
+    {
+        Database.getInstance().removeFileFromNode(body.getNode().getName(), body.getFilename());
+    }
 }
