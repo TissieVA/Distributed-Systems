@@ -59,6 +59,7 @@ public class ClientMessageHandler implements MessageHandler
             }
             case "update":
             {
+                // Remove all files from replicates folder
                 logger.info("Update message received");
                 File dir = new File(System.getProperty("user.dir")+"/replicates");
                 System.out.println(System.getProperty("user.dir")+"/replicates");
@@ -73,8 +74,8 @@ public class ClientMessageHandler implements MessageHandler
                 String nameServerAddress = Node.getClient().getNameServerAddress() + "/replicates/" +
                         Node.getClient().getName();
 
+                // Get all the files it should download
                 List<FileBody> files = HttpRequester.GETList(nameServerAddress, FileBody[].class);
-
 
                 if (files != null && !files.isEmpty())
                     for (FileBody file : files)
@@ -87,14 +88,18 @@ public class ClientMessageHandler implements MessageHandler
                                 Node.getFileServer().setReceived(false);
                                 logger.info("ask for: " + file.getFilename());
 
-                                // Tell the server the file wanting to receive
+                                // Tell the server which file it wants to receive
                                 Node.getFileServer().setFileName(file.getFilename());
 
-                                // Send a unicast to the node containing the file that it should sent the file to this Node
-                                // (details of this node in frb)
-                                FileRequestBody frb = new FileRequestBody(file.getFilename(), Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
-                                this.mss.sendUnicastMessage(gson.toJson(frb), file.getNode().getIpaddress(), file.getNode().getMcPort());
+                                // Send a unicast to the node containing the file that it should sent the file to
+                                // this Node (details of this node in frb)
+                                FileRequestBody frb = new FileRequestBody(file.getFilename(),
+                                        Node.getClient().getIpaddress(), Node.getClient().getFileTransferPort());
 
+                                this.mss.sendUnicastMessage(gson.toJson(frb),
+                                        file.getNode().getIpaddress(), file.getNode().getMcPort());
+
+                                // If the file takes too long skip it
                                 long pastTime = System.currentTimeMillis();
                                 boolean fail = false;
                                 while (!Node.getFileServer().isReceived() && !fail)
@@ -177,7 +182,5 @@ public class ClientMessageHandler implements MessageHandler
         FileBody fb = new FileBody(file,Node.getClient().getNodeBody());
         HttpRequester.POST(Node.getClient().getNameServerAddress() + "/files/add", gson.toJson(fb));
     }
-
-
 
 }
