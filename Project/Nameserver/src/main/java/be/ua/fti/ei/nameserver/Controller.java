@@ -98,8 +98,6 @@ public class Controller
         return ret;
     }
 
-
-
     @GetMapping("/files/{node}")
     List<String> getFilesInNode(@PathVariable String node)
     {
