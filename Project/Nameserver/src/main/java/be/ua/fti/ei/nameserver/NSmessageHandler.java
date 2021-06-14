@@ -45,9 +45,11 @@ public class NSmessageHandler implements MessageHandler
     }
 
     /**
-     * @param nodeId  is the to be deleted node hash
+     *
+     * @param nodeId hash of either ne node or node to be deleted
+     * @param deleteNodeOrNewNode true if it is a node we want to delete, false if it is a newly added node
      */
-    public void updateNeighboursAfterDeletion(int nodeId)
+    public void updateNeighbours(int nodeId, boolean deleteNodeOrNewNode)
     {
         logger.info("Updating neighbouring nodes");
         gson = new Gson();
@@ -56,9 +58,10 @@ public class NSmessageHandler implements MessageHandler
         int prevID = Database.getInstance().getLowerNeighbour(nodeId);
 
         Node next = Database.getInstance().getHostDatabase().get(nextID);
-        Node prev = Database.getInstance().getHostDatabase().get(nextID);
+        Node prev = Database.getInstance().getHostDatabase().get(prevID);
 
-        Database.getInstance().removeNode(nodeId);
+        if(deleteNodeOrNewNode)
+            Database.getInstance().removeNode(nodeId);
 
         // Send message to higherNeighbour to update its neighbours
         NextPreviousBody toHigherNeighbour = Database.getInstance().getNeighbours(nextID);
@@ -71,7 +74,6 @@ public class NSmessageHandler implements MessageHandler
         msg = gson.toJson(toLowerNeighbour);
 
         this.mss.sendUnicastMessage(msg, prev.getIpaddress(), prev.getMcPort());
-
     }
 
     public void update()
